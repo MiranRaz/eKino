@@ -1,0 +1,8 @@
+version: '3.4'
+
+services:
+  ekino:
+    image: ${DOCKER_REGISTRY-}ekino
+    build:
+      context: .
+      dockerfile: eKino/Dockerfile
