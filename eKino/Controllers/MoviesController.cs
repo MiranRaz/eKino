@@ -1,27 +1,19 @@
-﻿using eKino.Model;
+﻿using eKino.Controllers;
+using eKino.Model;
+using eKino.Model.Requests;
+using eKino.Model.SearchObjects;
 using eKino.Services.Interfaces;
+using eKino.Services.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace eKinoAPI.Controllers;
 
 [ApiController]
-[Route("[controller]")]
-public class MoviesController : ControllerBase
+public class MoviesController : BaseCRUDController<eKino.Model.Movies, MoviesSearchObject, MoviesInsertRequest, MoviesUpdateRequest>
 {
-    private readonly IMoviesServices _movies;
-
-    private readonly ILogger<MoviesController> _logger;
-
-    public MoviesController(ILogger<MoviesController> logger,IMoviesServices movies)
+    public MoviesController(ILogger<MoviesController> logger, IMoviesServices service)
+        : base(logger, service)
     {
-        _logger = logger;
-        _movies = movies;
-    }
-
-    [HttpGet()]
-    public IEnumerable<Movies> Get()
-    {
-       return _movies.Get();
     }
 }
 
