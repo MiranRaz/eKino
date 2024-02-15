@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
+using System.Net;
 
 namespace eKino.Services.Database
 {
@@ -388,34 +389,57 @@ namespace eKino.Services.Database
 
             int MovieGenreID = 0;
 
+            string thorImageUrl = "https://raw.githubusercontent.com/MiranRaz/eKino/main/eKino.Services/Images/thor.jpg";
+
+            byte[] thorImageBytes;
+            using (var webClient = new WebClient())
+            {
+                thorImageBytes = webClient.DownloadData(thorImageUrl);
+            }
             modelBuilder.Entity<Movie>().HasData(new Movie()
             {
                 MovieId = 1,
                 DirectorId = 1,
                 Title = "Thor: Love and Thunder",
                 Description = "Thor desc",
-                Year = new DateTime(2022, 9, 13, 20, 0, 0),
-                RunningTime = "100",
-                Photo = new byte[0]
+                Year = new DateTime(2020, 9, 13, 20, 0, 0),
+                RunningTime = "1h 45min",
+                Photo = thorImageBytes
             });
             modelBuilder.Entity<MovieGenre>().HasData(
                     new MovieGenre { MovieGenreId = ++MovieGenreID, MovieId = 1, GenreId = 1 },
                     new MovieGenre { MovieGenreId = ++MovieGenreID, MovieId = 1, GenreId = 10 },
                     new MovieGenre { MovieGenreId = ++MovieGenreID, MovieId = 1, GenreId = 4 });
+
+            string topgunmaverickImageUrl = "https://raw.githubusercontent.com/MiranRaz/eKino/main/eKino.Services/Images/topgunmaverick.jpg";
+
+            byte[] topgunmaverickImageBytes;
+            using (var webClient = new WebClient())
+            {
+                topgunmaverickImageBytes = webClient.DownloadData(topgunmaverickImageUrl);
+            }
+
             modelBuilder.Entity<Movie>().HasData(new Movie()
             {
                 MovieId = 2,
                 DirectorId = 2,
                 Title = "Top Gun: Maverick",
                 Description = "Top Gun: Maverick desc",
-                Year = new DateTime(2022, 9, 13, 20, 0, 0),
-                RunningTime = "100",
-                Photo = new byte[0]
+                Year = new DateTime(2023, 9, 13, 20, 0, 0),
+                RunningTime = "1h 30min",
+                Photo = topgunmaverickImageBytes
             });
             modelBuilder.Entity<MovieGenre>().HasData(
                     new MovieGenre { MovieGenreId = ++MovieGenreID, MovieId = 2, GenreId = 1 },
                     new MovieGenre { MovieGenreId = ++MovieGenreID, MovieId = 2, GenreId = 2 }
             );
+            string bullettrainImageUrl = "https://raw.githubusercontent.com/MiranRaz/eKino/main/eKino.Services/Images/bullettrain.jpg";
+
+            byte[] bullettrainImageBytes;
+            using (var webClient = new WebClient())
+            {
+                bullettrainImageBytes = webClient.DownloadData(bullettrainImageUrl);
+            }
             modelBuilder.Entity<Movie>().HasData(new Movie()
             {
                 MovieId = 3,
@@ -423,44 +447,65 @@ namespace eKino.Services.Database
                 Title = "Bullet Train",
                 Description = "Bullet Train desc",
                 Year = new DateTime(2022, 9, 13, 20, 0, 0),
-                RunningTime = "100",
-                Photo = new byte[0]
+                RunningTime = "2h 24min",
+                Photo = bullettrainImageBytes
             });
             modelBuilder.Entity<MovieGenre>().HasData(
                     new MovieGenre { MovieGenreId = ++MovieGenreID, MovieId = 3, GenreId = 1 },
                     new MovieGenre { MovieGenreId = ++MovieGenreID, MovieId = 3, GenreId = 4 },
                     new MovieGenre { MovieGenreId = ++MovieGenreID, MovieId = 3, GenreId = 6 }
             );
+            string samaritanImageUrl = "https://raw.githubusercontent.com/MiranRaz/eKino/main/eKino.Services/Images/samaritan.jpg";
+
+            byte[] samaritanImageBytes;
+            using (var webClient = new WebClient())
+            {
+                samaritanImageBytes = webClient.DownloadData(samaritanImageUrl);
+            }
             modelBuilder.Entity<Movie>().HasData(new Movie()
             {
                 MovieId = 4,
                 DirectorId = 4,
                 Title = "Samaritan",
                 Description = "A young boy learns that a superhero who was thought to have gone missing after an epic battle twenty years ago may in fact still be around.",
-                Year = new DateTime(2022, 9, 13, 20, 0, 0),
-                RunningTime = "100",
-                Photo = new byte[0]
+                Year = new DateTime(2018, 9, 13, 20, 0, 0),
+                RunningTime = "2h 12min",
+                Photo = samaritanImageBytes
             });
             modelBuilder.Entity<MovieGenre>().HasData(
                     new MovieGenre { MovieGenreId = ++MovieGenreID, MovieId = 4, GenreId = 1 },
                     new MovieGenre { MovieGenreId = ++MovieGenreID, MovieId = 4, GenreId = 2 },
                     new MovieGenre { MovieGenreId = ++MovieGenreID, MovieId = 4, GenreId = 11 }
             );
+            string fellowshipImageUrl = "https://raw.githubusercontent.com/MiranRaz/eKino/main/eKino.Services/Images/fellowship.jpg";
+
+            byte[] fellowshipImageBytes;
+            using (var webClient = new WebClient())
+            {
+                fellowshipImageBytes = webClient.DownloadData(fellowshipImageUrl);
+            }
             modelBuilder.Entity<Movie>().HasData(new Movie()
             {
                 MovieId = 5,
                 DirectorId = 5,
                 Title = "The Lord of the Rings: The Fellowship of the Ring",
                 Description = "A meek Hobbit from the Shire and eight companions set out on a journey to destroy the powerful One Ring and save Middle-earth from the Dark Lord Sauron.",
-                Year = new DateTime(2022, 9, 13, 20, 0, 0),
-                RunningTime = "100",
-                Photo = new byte[0]
+                Year = new DateTime(2008, 9, 13, 20, 0, 0),
+                RunningTime = "3h 22min",
+                Photo = fellowshipImageBytes
             });
             modelBuilder.Entity<MovieGenre>().HasData(
                     new MovieGenre { MovieGenreId = ++MovieGenreID, MovieId = 5, GenreId = 1 },
                     new MovieGenre { MovieGenreId = ++MovieGenreID, MovieId = 5, GenreId = 10 },
                     new MovieGenre { MovieGenreId = ++MovieGenreID, MovieId = 5, GenreId = 11 }
             );
+            string dominionImageUrl = "https://raw.githubusercontent.com/MiranRaz/eKino/main/eKino.Services/Images/dominion.jpg";
+
+            byte[] dominionImageBytes;
+            using (var webClient = new WebClient())
+            {
+                dominionImageBytes = webClient.DownloadData(dominionImageUrl);
+            }
             modelBuilder.Entity<Movie>().HasData(new Movie()
             {
                 MovieId = 6,
@@ -468,141 +513,204 @@ namespace eKino.Services.Database
                 Title = "Jurassic World Dominion",
                 Description = "Four years after the destruction of Isla Nublar, Biosyn operatives attempt to track down Maisie Lockwood, while Dr Ellie Sattler investigates a genetically engineered swarm of giant insects.",
                 Year = new DateTime(2022, 9, 13, 20, 0, 0),
-                RunningTime = "100",
-                Photo = new byte[0]
+                RunningTime = "1h 55min",
+                Photo = dominionImageBytes
             });
             modelBuilder.Entity<MovieGenre>().HasData(
                     new MovieGenre { MovieGenreId = ++MovieGenreID, MovieId = 6, GenreId = 1 },
                     new MovieGenre { MovieGenreId = ++MovieGenreID, MovieId = 6, GenreId = 10 },
                     new MovieGenre { MovieGenreId = ++MovieGenreID, MovieId = 6, GenreId = 7 }
             );
+            string beastImageUrl = "https://raw.githubusercontent.com/MiranRaz/eKino/main/eKino.Services/Images/beast.jpg";
+
+            byte[] beastImageBytes;
+            using (var webClient = new WebClient())
+            {
+                beastImageBytes = webClient.DownloadData(beastImageUrl);
+            }
             modelBuilder.Entity<Movie>().HasData(new Movie()
             {
                 MovieId = 7,
                 DirectorId = 7,
                 Title = "Beast",
                 Description = "A father and his two teenage daughters find themselves hunted by a massive rogue lion intent on proving that the Savanna has but one apex predator.",
-                Year = new DateTime(2022, 9, 13, 20, 0, 0),
-                RunningTime = "100",
-                Photo = new byte[0]
+                Year = new DateTime(2001, 9, 13, 20, 0, 0),
+                RunningTime = "1h 27min",
+                Photo = beastImageBytes
             });
             modelBuilder.Entity<MovieGenre>().HasData(
                     new MovieGenre { MovieGenreId = ++MovieGenreID, MovieId = 7, GenreId = 10 },
                     new MovieGenre { MovieGenreId = ++MovieGenreID, MovieId = 7, GenreId = 2 },
                     new MovieGenre { MovieGenreId = ++MovieGenreID, MovieId = 7, GenreId = 3 }
             );
+            string avatarImageUrl = "https://raw.githubusercontent.com/MiranRaz/eKino/main/eKino.Services/Images/avatar.jpg";
+
+            byte[] avatarImageBytes;
+            using (var webClient = new WebClient())
+            {
+                avatarImageBytes = webClient.DownloadData(avatarImageUrl);
+            }
             modelBuilder.Entity<Movie>().HasData(new Movie()
             {
                 MovieId = 8,
                 DirectorId = 8,
                 Title = "Avatar",
                 Description = "A paraplegic Marine dispatched to the moon Pandora on a unique mission becomes torn between following his orders and protecting the world he feels is his home.",
-                Year = new DateTime(2022, 9, 13, 20, 0, 0),
-                RunningTime = "100",
-                Photo = new byte[0]
+                Year = new DateTime(2009, 9, 13, 20, 0, 0),
+                RunningTime = "3h 15min",
+                Photo = avatarImageBytes
             });
             modelBuilder.Entity<MovieGenre>().HasData(
                     new MovieGenre { MovieGenreId = ++MovieGenreID, MovieId = 8, GenreId = 1 },
                     new MovieGenre { MovieGenreId = ++MovieGenreID, MovieId = 8, GenreId = 10 },
                     new MovieGenre { MovieGenreId = ++MovieGenreID, MovieId = 8, GenreId = 11 }
             );
+            string goodbaduglyImageUrl = "https://raw.githubusercontent.com/MiranRaz/eKino/main/eKino.Services/Images/goodbadugly.jpg";
+
+            byte[] goodbaduglyImageBytes;
+            using (var webClient = new WebClient())
+            {
+                goodbaduglyImageBytes = webClient.DownloadData(goodbaduglyImageUrl);
+            }
             modelBuilder.Entity<Movie>().HasData(new Movie()
             {
                 MovieId = 9,
                 DirectorId = 9,
                 Title = "The Good, the Bad and the Ugly",
                 Description = "A bounty hunting scam joins two men in an uneasy alliance against a third in a race to find a fortune in gold buried in a remote cemetery.",
-                Year = new DateTime(2022, 9, 13, 20, 0, 0),
-                RunningTime = "100",
-                Photo = new byte[0]
+                Year = new DateTime(1966, 9, 13, 20, 0, 0),
+                RunningTime = "2h 22min",
+                Photo = goodbaduglyImageBytes
             });
             modelBuilder.Entity<MovieGenre>().HasData(
                     new MovieGenre { MovieGenreId = ++MovieGenreID, MovieId = 9, GenreId = 10 },
                     new MovieGenre { MovieGenreId = ++MovieGenreID, MovieId = 9, GenreId = 5 }
             );
+            string batmanImageUrl = "https://raw.githubusercontent.com/MiranRaz/eKino/main/eKino.Services/Images/batman.jpg";
+
+            byte[] batmanImageBytes;
+            using (var webClient = new WebClient())
+            {
+                batmanImageBytes = webClient.DownloadData(batmanImageUrl);
+            }
             modelBuilder.Entity<Movie>().HasData(new Movie()
             {
                 MovieId = 10,
                 DirectorId = 10,
                 Title = "The Batman",
                 Description = "When a sadistic serial killer begins murdering key political figures in Gotham, Batman is forced to investigate the city's hidden corruption and question his family's involvement.",
-                Year = new DateTime(2022, 9, 13, 20, 0, 0),
-                RunningTime = "100",
-                Photo = new byte[0]
+                Year = new DateTime(2009, 9, 13, 20, 0, 0),
+                RunningTime = "2h 41min",
+                Photo = batmanImageBytes
             });
             modelBuilder.Entity<MovieGenre>().HasData(
                     new MovieGenre { MovieGenreId = ++MovieGenreID, MovieId = 10, GenreId = 1 },
                     new MovieGenre { MovieGenreId = ++MovieGenreID, MovieId = 10, GenreId = 9 },
                     new MovieGenre { MovieGenreId = ++MovieGenreID, MovieId = 10, GenreId = 2 }
             );
+            string pinocchioImageUrl = "https://raw.githubusercontent.com/MiranRaz/eKino/main/eKino.Services/Images/pinocchio.jpg";
+
+            byte[] pinocchioImageBytes;
+            using (var webClient = new WebClient())
+            {
+                pinocchioImageBytes = webClient.DownloadData(pinocchioImageUrl);
+            }
             modelBuilder.Entity<Movie>().HasData(new Movie()
             {
                 MovieId = 11,
                 DirectorId = 11,
                 Title = "Pinocchio",
                 Description = "A puppet is brought to life by a fairy, who assigns him to lead a virtuous life in order to become a real boy.",
-                Year = new DateTime(2022, 9, 13, 20, 0, 0),
-                RunningTime = "100",
-                Photo = new byte[0]
+                Year = new DateTime(2012, 9, 13, 20, 0, 0),
+                RunningTime = "1h 21min",
+                Photo = pinocchioImageBytes
             });
             modelBuilder.Entity<MovieGenre>().HasData(
                     new MovieGenre { MovieGenreId = ++MovieGenreID, MovieId = 11, GenreId = 1 },
                     new MovieGenre { MovieGenreId = ++MovieGenreID, MovieId = 11, GenreId = 4 },
                     new MovieGenre { MovieGenreId = ++MovieGenreID, MovieId = 11, GenreId = 2 }
             );
+            string loveinthevillaImageUrl = "https://raw.githubusercontent.com/MiranRaz/eKino/main/eKino.Services/Images/loveinthevilla.jpg";
+
+            byte[] loveinthevillaImageBytes;
+            using (var webClient = new WebClient())
+            {
+                loveinthevillaImageBytes = webClient.DownloadData(loveinthevillaImageUrl);
+            }
             modelBuilder.Entity<Movie>().HasData(new Movie()
             {
                 MovieId = 12,
                 DirectorId = 12,
                 Title = "Love in the Villa",
                 Description = "A young woman takes a trip to romantic Verona, Italy, after a breakup, only to find that the villa she reserved was double-booked, and she'll have to share her vacation with a cynical British man.",
-                Year = new DateTime(2022, 9, 13, 20, 0, 0),
-                RunningTime = "100",
-                Photo = new byte[0]
+                Year = new DateTime(2017, 9, 13, 20, 0, 0),
+                RunningTime = "1h 35min",
+                Photo = loveinthevillaImageBytes
             });
             modelBuilder.Entity<MovieGenre>().HasData(
                     new MovieGenre { MovieGenreId = ++MovieGenreID, MovieId = 12, GenreId = 4 },
                     new MovieGenre { MovieGenreId = ++MovieGenreID, MovieId = 12, GenreId = 8 }
             );
+            string xImageUrl = "https://raw.githubusercontent.com/MiranRaz/eKino/main/eKino.Services/Images/x.jpg";
+
+            byte[] xImageBytes;
+            using (var webClient = new WebClient())
+            {
+                xImageBytes = webClient.DownloadData(xImageUrl);
+            }
             modelBuilder.Entity<Movie>().HasData(new Movie()
             {
                 MovieId = 13,
                 DirectorId = 13,
                 Title = "X",
                 Description = "In 1979, a group of young filmmakers set out to make an adult film in rural Texas, but when their reclusive, elderly hosts catch them in the act, the cast find themselves fighting for their lives.",
-                Year = new DateTime(2022, 9, 13, 20, 0, 0),
-                RunningTime = "100",
-                Photo = new byte[0]
+                Year = new DateTime(2014, 9, 13, 20, 0, 0),
+                RunningTime = "2h 15min",
+                Photo = xImageBytes
             });
             modelBuilder.Entity<MovieGenre>().HasData(
                     new MovieGenre { MovieGenreId = ++MovieGenreID, MovieId = 13, GenreId = 3 },
                     new MovieGenre { MovieGenreId = ++MovieGenreID, MovieId = 13, GenreId = 12 },
                     new MovieGenre { MovieGenreId = ++MovieGenreID, MovieId = 13, GenreId = 6 }
             );
+            string blondeImageUrl = "https://raw.githubusercontent.com/MiranRaz/eKino/main/eKino.Services/Images/blonde.jpg";
+
+            byte[] blondeImageBytes;
+            using (var webClient = new WebClient())
+            {
+                blondeImageBytes = webClient.DownloadData(blondeImageUrl);
+            }
             modelBuilder.Entity<Movie>().HasData(new Movie()
             {
                 MovieId = 14,
                 DirectorId = 14,
                 Title = "Blonde",
                 Description = "A fictionalized chronicle of the inner life of Marilyn Monroe.",
-                Year = new DateTime(2022, 9, 13, 20, 0, 0),
-                RunningTime = "100",
-                Photo = new byte[0]
+                Year = new DateTime(2011, 9, 13, 20, 0, 0),
+                RunningTime = "2h 11min",
+                Photo = blondeImageBytes
             });
             modelBuilder.Entity<MovieGenre>().HasData(
                     new MovieGenre { MovieGenreId = ++MovieGenreID, MovieId = 14, GenreId = 4 },
                     new MovieGenre { MovieGenreId = ++MovieGenreID, MovieId = 14, GenreId = 8 },
                     new MovieGenre { MovieGenreId = ++MovieGenreID, MovieId = 14, GenreId = 12 }
             );
+            string northmanImageUrl = "https://raw.githubusercontent.com/MiranRaz/eKino/main/eKino.Services/Images/northman.jpg";
+
+            byte[] northmanImageBytes;
+            using (var webClient = new WebClient())
+            {
+                northmanImageBytes = webClient.DownloadData(northmanImageUrl);
+            }
             modelBuilder.Entity<Movie>().HasData(new Movie()
             {
                 MovieId = 15,
                 DirectorId = 15,
                 Title = "The Northman",
                 Description = "From visionary director Robert Eggers comes The Northman, an action-filled epic that follows a young Viking prince on his quest to avenge his father's murder.",
-                Year = new DateTime(2022, 9, 13, 20, 0, 0),
-                RunningTime = "100",
-                Photo = new byte[0]
+                Year = new DateTime(2021, 9, 13, 20, 0, 0),
+                RunningTime = "2h 5min",
+                Photo = northmanImageBytes
             });
             modelBuilder.Entity<MovieGenre>().HasData(
                     new MovieGenre { MovieGenreId = ++MovieGenreID, MovieId = 15, GenreId = 1 },
@@ -636,38 +744,22 @@ namespace eKino.Services.Database
 
             int ProjectionID = 0;
 
-            modelBuilder.Entity<Projection>().HasData(new Projection()
+            // Loop through each projection
+            for (int i = 0; i < 4; i++) // Change 4 to the number of projections you want to generate
             {
-                ProjectionId = ++ProjectionID,
-                DateOfProjection = new DateTime(2022, 9, 13, 20, 0, 0),
-                AuditoriumId = (ProjectionID % 5) + 1,
-                MovieId = ProjectionID,
-                TicketPrice = 5.00m
-            });
-            modelBuilder.Entity<Projection>().HasData(new Projection()
-            {
-                ProjectionId = ++ProjectionID,
-                DateOfProjection = new DateTime(2022, 9, 13, 20, 0, 0),
-                AuditoriumId = (ProjectionID % 5) + 1,
-                MovieId = ProjectionID,
-                TicketPrice = 5.00m
-            });
-            modelBuilder.Entity<Projection>().HasData(new Projection()
-            {
-                ProjectionId = ++ProjectionID,
-                DateOfProjection = new DateTime(2022, 9, 13, 20, 0, 0),
-                AuditoriumId = (ProjectionID % 5) + 1,
-                MovieId = ProjectionID,
-                TicketPrice = 5.00m
-            });
-            modelBuilder.Entity<Projection>().HasData(new Projection()
-            {
-                ProjectionId = ++ProjectionID,
-                DateOfProjection = new DateTime(2022, 9, 13, 20, 0, 0),
-                AuditoriumId = (ProjectionID % 5) + 1,
-                MovieId = ProjectionID,
-                TicketPrice = 5.00m
-            });
+                // Generate a random number of days between 1 and 30
+                Random rnd = new Random();
+                int randomDays = rnd.Next(1, 31);
+
+                modelBuilder.Entity<Projection>().HasData(new Projection()
+                {
+                    ProjectionId = ++ProjectionID,
+                    DateOfProjection = DateTime.Now.AddDays(randomDays), // Add random number of days to current date
+                    AuditoriumId = (ProjectionID % 5) + 1,
+                    MovieId = ProjectionID,
+                    TicketPrice = 5.00m
+                });
+            }
 
 
             int ReservationID = 0;

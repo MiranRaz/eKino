@@ -39,7 +39,26 @@ namespace eKino.Services.Services
 
             await _context.SaveChangesAsync();
             return _mapper.Map<T>(entity);
-        } 
+        }
+
+        public virtual async Task<T> Delete(int id)
+        {
+            var set = _context.Set<TDb>();
+
+            var entity = await set.FindAsync(id);
+
+            if (entity != null)
+            {
+                set.Remove(entity);
+            }
+            else
+            {
+                return null;
+            }
+
+            await _context.SaveChangesAsync();
+            return _mapper.Map<T>(entity);
+        }
     }
 }
 

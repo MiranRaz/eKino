@@ -5,8 +5,8 @@ using eKino.Model.SearchObjects;
 
 namespace eKino.Services.Interfaces
 {
-    public interface IMoviesServices : ICRUDService<Model.Movies, MoviesSearchObject, MoviesInsertRequest, MoviesUpdateRequest>
+    public interface IMoviesServices : ICRUDService<Model.Movies, MoviesSearchObject, MovieUpsertRequest, MovieUpsertRequest>
     {
+        List<Model.Movies> Recommend(int id);
     }
 }
-

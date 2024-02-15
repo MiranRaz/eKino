@@ -1,4 +1,4 @@
-version: '1'
+version: '3.8'
 services:
   #mssql docker
   ekino-sql:
@@ -28,6 +28,7 @@ services:
       - ASPNETCORE_ENVIRONMENT=Development
     ports:
       - 7127:7127
+      - 443:443
     networks:
       - ekinonet
     links:

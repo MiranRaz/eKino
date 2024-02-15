@@ -1,46 +1,24 @@
+import 'package:ekino_admin/providers/directors_provider.dart';
 import 'package:ekino_admin/providers/movies_provider.dart';
-import 'package:ekino_admin/screens/movies_list_screen.dart';
+import 'package:ekino_admin/providers/projections_provider.dart';
+import 'package:ekino_admin/providers/role_provider.dart';
+import 'package:ekino_admin/providers/users_provider.dart';
+import 'package:ekino_admin/screens/upcoming_screen.dart';
 import 'package:ekino_admin/utils/util.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 void main() {
   runApp(MultiProvider(
-    providers: [ChangeNotifierProvider(create: (_) => MoviesProvider())],
+    providers: [
+      ChangeNotifierProvider(create: (_) => MoviesProvider()),
+      ChangeNotifierProvider(create: (_) => DirectorsProvider()),
+      ChangeNotifierProvider(create: (_) => ProjectionsProvider()),
+      ChangeNotifierProvider(create: (_) => UsersProvider()),
+      ChangeNotifierProvider(create: (_) => RoleProvider())
+    ],
     child: const MyMaterialApp(),
   ));
-}
-
-class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
-
-  // This widget is the root of your application.
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // TRY THIS: Try running your application with "flutter run". You'll see
-        // the application has a purple toolbar. Then, without quitting the app,
-        // try changing the seedColor in the colorScheme below to Colors.green
-        // and then invoke "hot reload" (save your changes or press the "hot
-        // reload" button in a Flutter-supported IDE, or press "r" if you used
-        // the command line to start the app).
-        //
-        // Notice that the counter didn't reset back to zero; the application
-        // state is not lost during the reload. To reset the state, use hot
-        // restart instead.
-        //
-        // This works for code too, not just values: Most code changes can be
-        // tested with just a hot reload.
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.purple),
-        useMaterial3: true,
-      ),
-      home: MyMaterialApp(),
-    );
-  }
 }
 
 class MyMaterialApp extends StatelessWidget {
@@ -95,8 +73,11 @@ class LoginPage extends StatelessWidget {
                 height: 16,
               ),
               TextField(
+                obscureText: true,
                 decoration: const InputDecoration(
-                    labelText: "Password", prefixIcon: Icon(Icons.password)),
+                  labelText: "Password",
+                  prefixIcon: Icon(Icons.password),
+                ),
                 controller: _passwordController,
               ),
               const SizedBox(
@@ -114,7 +95,7 @@ class LoginPage extends StatelessWidget {
                       await _moviesProvider.get();
 
                       Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => const MoviesListScreen()));
+                          builder: (context) => const UpcomingScreen()));
                     } on Exception catch (e) {
                       showDialog(
                           context: context,

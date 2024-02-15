@@ -1,5 +1,7 @@
-﻿using eKino;
+﻿using System.Net;
+using eKino;
 using eKino.Filters;
+using eKino.Model.SearchObjects;
 using eKino.Services.Database;
 using eKino.Services.Interfaces;
 using eKino.Services.Services;
@@ -9,11 +11,37 @@ using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
+
 // Add services to the container.
 
-builder.Services.AddTransient<IMoviesServices, MoviesServices>();
+//builder.Services.AddTransient<IMoviesServices, MoviesServices>();
+//builder.Services.AddTransient<IUserService, UserService>();
+//builder.Services.AddTransient<IDirectorService, DirectorService>();
+
 builder.Services.AddTransient<IUserService, UserService>();
+builder.Services.AddTransient<IService<eKino.Model.Role, BaseSearchObject>, BaseService<eKino.Model.Role, Role, BaseSearchObject>>();
+builder.Services.AddTransient<IAuditoriumService, AuditoriumService>();
 builder.Services.AddTransient<IDirectorService, DirectorService>();
+builder.Services.AddTransient<IGenreService, GenreService>();
+builder.Services.AddTransient<IMoviesServices, MoviesServices>();
+builder.Services.AddTransient<IProjectionService, ProjectionService>();
+builder.Services.AddTransient<IRatingService, RatingService>();
+builder.Services.AddTransient<IReservationService, ReservationService>();
+builder.Services.AddTransient<ITransactionService, TransactionService>();
+builder.Services.AddTransient<IRoleService, RoleService>();
+
+
+builder.Services.AddAutoMapper(typeof(IUserService));
+builder.Services.AddAutoMapper(typeof(IAuditoriumService));
+builder.Services.AddAutoMapper(typeof(IDirectorService));
+builder.Services.AddAutoMapper(typeof(IGenreService));
+builder.Services.AddAutoMapper(typeof(IMoviesServices));
+builder.Services.AddAutoMapper(typeof(IProjectionService));
+builder.Services.AddAutoMapper(typeof(IRatingService));
+builder.Services.AddAutoMapper(typeof(IReservationService));
+builder.Services.AddAutoMapper(typeof(ITransactionService));
+builder.Services.AddAutoMapper(typeof(ITransactionService));
+builder.Services.AddAutoMapper(typeof(IRoleService));
 
 builder.Services.AddControllers(x =>
 {
@@ -54,10 +82,11 @@ builder.Services.AddAutoMapper(typeof(IUserService));
 builder.Services.AddAuthentication("BasicAuthentication")
     .AddScheme<AuthenticationSchemeOptions, BasicAuthenticationHandler>("BasicAuthentication", null);
 
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())  
+if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
@@ -65,8 +94,10 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+
 app.UseAuthentication();
 app.UseAuthorization();
+
 
 app.MapControllers();
 

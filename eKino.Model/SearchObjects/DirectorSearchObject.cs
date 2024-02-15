@@ -3,7 +3,7 @@ namespace eKino.Model.SearchObjects
 {
     public class DirectorSearchObject : BaseSearchObject
     {
-        public string? Name { get; set; }
+        public string? FullName { get; set; }
         // Full Text Search
         public string? FTS { get; set; }
     }

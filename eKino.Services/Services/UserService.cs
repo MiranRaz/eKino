@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 using System.Text;
 using AutoMapper;
@@ -18,6 +19,84 @@ namespace eKino.Services.Services
         {
        
         }
+
+        public override async Task<Model.User> Insert(UsersInsertRequest insert)
+        { 
+            var entity = _mapper.Map<Database.User>(insert);
+            entity.PasswordSalt = GenerateSalt();
+            entity.PasswordHash = GenerateHash(entity.PasswordSalt, insert.Password);
+
+            _context.Users.Add(entity);
+            await _context.SaveChangesAsync();
+
+            foreach (var roleId in insert.RoleIdList)
+            {
+                var role = await _context.Roles.FindAsync(roleId);
+                if (role == null)
+                {
+                    throw new InvalidOperationException($"Role with ID {roleId} not found.");
+                }
+
+                var userRole = new Database.UserRole
+                {
+                    RoleId = roleId,
+                    Role = role,  // Set the Role navigation property
+                    UserId = entity.UserId,
+                    DateModified = DateTime.Now
+                };
+
+                _context.UserRoles.Add(userRole);
+            }
+
+            await _context.SaveChangesAsync();
+
+            return _mapper.Map<Model.User>(entity);
+        }
+
+        public override async Task<Model.User> Update(int id, UsersUpdateRequest update)
+        {
+           
+            var entity = await _context.Users.Include(x => x.UserRoles).FirstOrDefaultAsync(x => x.UserId == id);
+
+            if (entity == null)
+            {
+                return null;
+            }
+
+            _mapper.Map(update, entity);
+
+            if (!string.IsNullOrEmpty(update.Password))
+            {
+                entity.PasswordSalt = GenerateSalt();
+                entity.PasswordHash = GenerateHash(entity.PasswordSalt, update.Password);
+            }
+
+            foreach (var roleId in update.RoleIdList)
+            {
+                if (!entity.UserRoles.Any(x => x.RoleId == roleId))
+                {
+                    entity.UserRoles.Add(new Database.UserRole
+                    {
+                        RoleId = roleId,
+                        DateModified = DateTime.Now
+                    });
+                }
+            }
+
+            foreach (var userRole in entity.UserRoles.ToList())
+            {
+                if (!update.RoleIdList.Contains(userRole.RoleId))
+                {
+                    entity.UserRoles.Remove(userRole);
+                }
+            }
+
+            await _context.SaveChangesAsync();
+
+            return _mapper.Map<Model.User>(entity);
+        }
+
+
 
         // login
         public async Task<Model.User> Login(string username, string password)
@@ -70,15 +149,27 @@ namespace eKino.Services.Services
         }
 
         public override IQueryable<User> AddInclude(IQueryable<User> query, UserSearchObject? search = null)
-        {
-            if(search?.IsRoleIncluded == true)
-            {
-                query = query.Include("UserRoles.Role");
-            }
+        { 
+            query = query.Include(u => u.UserRoles).ThenInclude(ur => ur.Role);
             return base.AddInclude(query, search);
         }
 
-       
+        public override IQueryable<Database.User> AddFilter(IQueryable<Database.User> query, UserSearchObject search = null)
+        {
+            var filteredQuery = base.AddFilter(query, search);
+
+            if (!string.IsNullOrWhiteSpace(search?.Username))
+            {
+                filteredQuery = filteredQuery.Where(x => x.Username.Contains(search.Username));
+            }
+
+            if (!string.IsNullOrWhiteSpace(search?.Name))
+            {
+                filteredQuery = filteredQuery.Where(x => (x.FirstName + " " + x.LastName).Contains(search.Name));
+            }
+
+            return filteredQuery;
+        }
     }
 }
 

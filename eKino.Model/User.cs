@@ -17,7 +17,7 @@ namespace eKino.Model
 
         public virtual ICollection<UserRole> UserRoles { get; set; } = new List<UserRole>();
 
-        //public string RoleNames => string.Join(", ", UserRoles?.Select(x => x.Role?.Name)?.ToList());
+        public string RoleNames => string.Join(", ", UserRoles?.Select(x => x.Role?.Name)?.ToList());
 
         public override string ToString()
         {

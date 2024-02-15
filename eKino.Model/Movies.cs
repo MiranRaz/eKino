@@ -14,7 +14,7 @@ namespace eKino.Model
         {
             return Title;
         }
-        //public virtual Director Director { get; set; } = null!;
+        //public virtual Director Director { get; set; } = null!; 
         //public virtual ICollection<MovieGenre> MovieGenres { get; set; }
         //public virtual ICollection<Projection> Projections { get; set; }
         //public virtual ICollection<Rating> Ratings { get; set; }

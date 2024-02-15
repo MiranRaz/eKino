@@ -5,6 +5,7 @@ namespace eKino.Model.SearchObjects
     {
         public string? FTS { get; set; }
         public string? Title { get; set; }
+        public int? DirectorId { get; set; }
     }
 }
 

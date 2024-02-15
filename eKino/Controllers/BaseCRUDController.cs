@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using eKino.Model;
 using eKino.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace eKino.Controllers
 {
@@ -21,15 +23,24 @@ namespace eKino.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Administrator")]
         public virtual async Task<T> Insert([FromBody]TInsert insert)
         {
             return await _service.Insert(insert);
         }
 
         [HttpPut("{id}")]
+        [Authorize(Roles = "Administrator")]
         public virtual async Task<T> Update(int id, [FromBody]TUpdate update)
         {
             return await _service.Update(id, update);
+        }
+
+        [HttpDelete("{id}")]
+        [Authorize(Roles = "Administrator")]
+        public virtual async Task<T> Delete(int id)
+        {
+            return await _service.Delete(id);
         }
     }
 }

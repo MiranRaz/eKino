@@ -13,15 +13,20 @@ namespace eKino.Model.Requests
 
         [Required(AllowEmptyStrings = false, ErrorMessage = "Username is required!")]
         public string Username { get; set; }
-        public bool Status { get; set; }
-        public string? Email { get; set; }
-        public string? Phone { get; set; }
+        public bool? Status { get; set; }
+        [Required(AllowEmptyStrings = false)]
+        [EmailAddress()]
+        public string Email { get; set; }
+        [Required(AllowEmptyStrings = false)]
+        public string Phone { get; set; }
 
         [Compare("PasswordConfirmation", ErrorMessage ="Passwords do not match")]
         public string Password { get; set; }
 
         [Compare("Password", ErrorMessage = "Passwords do not match")]
         public string PasswordConfirmation { get; set; }
+
+        public List<int> RoleIdList { get; set; } = new List<int> { };
     }
 }
 

@@ -22,5 +22,11 @@ public class UsersController : BaseCRUDController<eKino.Model.User, UserSearchOb
     {
         return base.Insert(insert);
     }
+
+    [Authorize(Roles = "Administrator")]
+    public override Task<User> Update(int id, [FromBody] UsersUpdateRequest update)
+    {
+        return base.Update(id, update);
+    }
 }
 

@@ -1,5 +1,6 @@
 ﻿using System;
 using eKino.Model;
+using eKino.Model.SearchObjects;
 using eKino.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -13,6 +14,12 @@ namespace eKino.Controllers
         protected readonly IService<T, TSearch> _service;
 
         protected readonly ILogger<BaseController<T, TSearch>> _logger;
+        private IService<Role, BaseSearchObject> service;
+
+        public BaseController(IService<Role, BaseSearchObject> service)
+        {
+            this.service = service;
+        }
 
         public BaseController(ILogger<BaseController<T, TSearch>> logger, IService<T, TSearch> service)
         {
