@@ -1,4 +1,5 @@
 import 'package:ekino_admin/main.dart';
+import 'package:ekino_admin/screens/upcoming_details_screen.dart';
 import 'package:ekino_admin/screens/users_details_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:ekino_admin/screens/movies_details_screen.dart';
@@ -38,6 +39,14 @@ class _MasterScreenWidgetState extends State<MasterScreenWidget> {
               onTap: () {
                 Navigator.of(context).push(MaterialPageRoute(
                   builder: (context) => const UpcomingScreen(),
+                ));
+              },
+            ),
+            ListTile(
+              title: const Text("Add new projection"),
+              onTap: () {
+                Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => const ProjectionDetailsScreen(),
                 ));
               },
             ),

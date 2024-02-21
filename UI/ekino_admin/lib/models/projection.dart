@@ -2,10 +2,10 @@ import 'package:ekino_admin/models/movies.dart'; // Import the Movie model
 
 class Projection {
   int? projectionId;
-  DateTime dateOfProjection;
-  int auditoriumId;
-  Movies movie; // Reference to the Movie model
-  double ticketPrice;
+  DateTime dateOfProjection; // Change the type to DateTime
+  int? auditoriumId;
+  Movies? movie;
+  double? ticketPrice;
 
   Projection(
     this.projectionId,
@@ -18,20 +18,23 @@ class Projection {
   factory Projection.fromJson(Map<String, dynamic> json) {
     return Projection(
       json['projectionId'] as int?,
-      DateTime.parse(json['dateOfProjection'] as String),
-      json['auditoriumId'] as int,
-      Movies.fromJson(
-          json['movie'] as Map<String, dynamic>), // Parse the Movie object
-      json['ticketPrice'] as double,
+      json['dateOfProjection'] != null
+          ? DateTime.parse(json['dateOfProjection'] as String)
+          : DateTime.now(),
+      json['auditoriumId'] as int?,
+      json['movie'] != null
+          ? Movies.fromJson(json['movie'] as Map<String, dynamic>)
+          : null,
+      json['ticketPrice'] as double?,
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
       'projectionId': projectionId,
-      'dateOfProjection': dateOfProjection.toIso8601String(),
+      'dateOfProjection': dateOfProjection,
       'auditoriumId': auditoriumId,
-      'movie': movie.toJson(), // Convert the Movie object to JSON
+      'movie': movie != null ? movie!.toJson() : null,
       'ticketPrice': ticketPrice,
     };
   }
