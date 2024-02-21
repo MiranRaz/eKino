@@ -124,15 +124,8 @@ class _ProjectionDetailsScreenState extends State<ProjectionDetailsScreen> {
               final formData = _formKey.currentState?.value;
               if (formData != null) {
                 try {
-                  if (widget.projection != null) {
-                    // Update projection logic
-                    print("this is update... no logic so far");
-                  } else {
-                    // Insert projection logic
-                    await _saveProjection(formData);
-                  }
+                  await _saveProjection(formData);
                 } catch (error) {
-                  // Handle error
                   print('Error: $error');
                   _showMessageDialog('Error', 'An error occurred: $error');
                 }
