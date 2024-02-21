@@ -8,8 +8,6 @@ import 'package:ekino_admin/models/search_result.dart'; // Importing SearchResul
 import 'package:ekino_admin/widgets/master_screen.dart';
 import 'package:intl/intl.dart';
 
-// Import other dependencies here
-
 class UpcomingScreen extends StatefulWidget {
   const UpcomingScreen({Key? key}) : super(key: key);
 

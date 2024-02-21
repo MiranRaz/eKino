@@ -13,15 +13,34 @@ namespace eKino.Services.Services
 {
     public class UserService : BaseCRUDService<Model.User, Database.User, UserSearchObject, UsersInsertRequest, UsersUpdateRequest>, IUserService 
     {
-       
+
         public UserService(eKinoContext context, IMapper mapper)
             : base(context, mapper)
         {
-       
+        }
+
+        public async Task<bool> GetUserByUsername(string username)
+        {
+            return await _context.Users.AnyAsync(u => u.Username == username);
+        }
+
+        public async Task<bool> UsernameExists(string username)
+        {
+            return await _context.Users.AnyAsync(u => u.Username == username);
+        }
+
+        public async Task<bool> EmailExists(string email)
+        {
+            return await _context.Users.AnyAsync(u => u.Email == email);
+        }
+
+        public async Task<bool> PhoneExists(string phone)
+        {
+            return await _context.Users.AnyAsync(u => u.Phone == phone);
         }
 
         public override async Task<Model.User> Insert(UsersInsertRequest insert)
-        { 
+        {
             var entity = _mapper.Map<Database.User>(insert);
             entity.PasswordSalt = GenerateSalt();
             entity.PasswordHash = GenerateHash(entity.PasswordSalt, insert.Password);

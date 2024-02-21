@@ -15,7 +15,7 @@ void main() {
       ChangeNotifierProvider(create: (_) => DirectorsProvider()),
       ChangeNotifierProvider(create: (_) => ProjectionsProvider()),
       ChangeNotifierProvider(create: (_) => UsersProvider()),
-      ChangeNotifierProvider(create: (_) => RoleProvider())
+      ChangeNotifierProvider(create: (_) => RoleProvider()),
     ],
     child: const MyMaterialApp(),
   ));

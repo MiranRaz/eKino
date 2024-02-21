@@ -5,6 +5,7 @@ import 'package:http/http.dart' as http;
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 abstract class BaseProvider<T> with ChangeNotifier {
   static String? _baseUrl;
@@ -95,9 +96,17 @@ abstract class BaseProvider<T> with ChangeNotifier {
     }
   }
 
+  Future<void> saveUsernameStateToLocalStorage(String usernameState) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString(
+        'usernameState', usernameState); // Store username with key 'kita'
+  }
+
   Map<String, String> createHeaders() {
     String username = Authorization.username ?? "";
     String password = Authorization.password ?? "";
+
+    saveUsernameStateToLocalStorage(username);
 
     // Check if the provided credentials match the admin credentials
     if (username == "admin") {
@@ -144,5 +153,57 @@ abstract class BaseProvider<T> with ChangeNotifier {
       }
     });
     return query;
+  }
+
+  Future<bool> checkUsernameExists(String username) async {
+    var url = "$_baseUrl$_endpoint/checkusername/$username";
+    var uri = Uri.parse(url);
+    var headers = createHeaders();
+
+    var response = await http.get(uri, headers: headers);
+    if (isValidResponse(response)) {
+      return jsonDecode(response.body);
+    } else {
+      throw Exception("Unknown error, please try again!");
+    }
+  }
+
+  Future<bool> checkEmailExists(String email) async {
+    var url = "$_baseUrl$_endpoint/checkemail/$email";
+    var uri = Uri.parse(url);
+    var headers = createHeaders();
+
+    var response = await http.get(uri, headers: headers);
+    if (isValidResponse(response)) {
+      return jsonDecode(response.body);
+    } else {
+      throw Exception("Unknown error, please try again!");
+    }
+  }
+
+  Future<bool> checkPhoneExists(String phone) async {
+    var url = "$_baseUrl$_endpoint/checkphone/$phone";
+    var uri = Uri.parse(url);
+    var headers = createHeaders();
+
+    var response = await http.get(uri, headers: headers);
+    if (isValidResponse(response)) {
+      return jsonDecode(response.body);
+    } else {
+      throw Exception("Unknown error, please try again!");
+    }
+  }
+
+  Future<bool> getUsername(String username) async {
+    var url = "$_baseUrl$_endpoint/getusername/$username";
+    var uri = Uri.parse(url);
+    var headers = createHeaders();
+
+    var response = await http.get(uri, headers: headers);
+    if (isValidResponse(response)) {
+      return jsonDecode(response.body);
+    } else {
+      throw Exception("Unknown error, please try again!");
+    }
   }
 }

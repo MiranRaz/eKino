@@ -19,7 +19,7 @@ var builder = WebApplication.CreateBuilder(args);
 //builder.Services.AddTransient<IDirectorService, DirectorService>();
 
 builder.Services.AddTransient<IUserService, UserService>();
-builder.Services.AddTransient<IService<eKino.Model.Role, BaseSearchObject>, BaseService<eKino.Model.Role, Role, BaseSearchObject>>();
+builder.Services.AddTransient<IRoleService, RoleService>();
 builder.Services.AddTransient<IAuditoriumService, AuditoriumService>();
 builder.Services.AddTransient<IDirectorService, DirectorService>();
 builder.Services.AddTransient<IGenreService, GenreService>();

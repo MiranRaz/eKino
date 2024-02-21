@@ -24,5 +24,6 @@ public class MoviesController : BaseCRUDController<eKino.Model.Movies, MoviesSea
     {
         return (_service as IMoviesServices).Recommend(id);
     }
+
 }
 

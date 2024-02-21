@@ -7,6 +7,7 @@ import 'package:ekino_admin/screens/users_list_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class UserDetailsScreen extends StatefulWidget {
   final Users? user;
@@ -24,11 +25,24 @@ class _UserDetailsScreenState extends State<UserDetailsScreen> {
 
   SearchResult<Role>? _roleResult;
   bool _isLoading = true;
+  int? _selectedRoleId;
+  String? usernameLS;
+
+  Future<String?> _retrieveAndPrintUsernameState() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? usernameState = prefs.getString('usernameState');
+    return usernameState;
+  }
 
   @override
   void initState() {
     super.initState();
     _usersProvider = context.read<UsersProvider>();
+    _retrieveAndPrintUsernameState().then((username) {
+      setState(() {
+        usernameLS = username;
+      });
+    });
 
     _initData().then((_) {
       setState(() {
@@ -49,7 +63,21 @@ class _UserDetailsScreenState extends State<UserDetailsScreen> {
   }
 
   Future<void> _initData() async {
-    _roleResult = await _roleProvider.get();
+    try {
+      _roleResult = await _roleProvider.get();
+      // Set the initial value of roleIdList based on user's role
+      if (widget.user != null && widget.user!.roleNames != null) {
+        final selectedRole = _roleResult?.result.firstWhere(
+          (role) => role.name == widget.user!.roleNames,
+        );
+        setState(() {
+          _selectedRoleId =
+              selectedRole?.roleId; // Use selectedRole?.roleId to handle null
+        });
+      }
+    } catch (error) {
+      print('Error initializing data: $error');
+    }
   }
 
   @override
@@ -74,6 +102,9 @@ class _UserDetailsScreenState extends State<UserDetailsScreen> {
   }
 
   FormBuilder _buildForm() {
+    bool isEditMode = widget.user != null;
+    bool showPasswordFields = isEditMode && widget.user?.username == usernameLS;
+
     return FormBuilder(
       key: _formKey,
       child: Column(
@@ -81,18 +112,26 @@ class _UserDetailsScreenState extends State<UserDetailsScreen> {
           FormBuilderTextField(
             name: 'firstName',
             decoration: InputDecoration(labelText: 'First Name'),
+            initialValue: widget.user?.firstName ?? '',
+            enabled: showPasswordFields || !isEditMode,
           ),
           FormBuilderTextField(
             name: 'lastName',
             decoration: InputDecoration(labelText: 'Last Name'),
+            initialValue: widget.user?.lastName ?? '',
+            enabled: showPasswordFields || !isEditMode,
           ),
           FormBuilderTextField(
-            name: 'username',
-            decoration: InputDecoration(labelText: 'Username'),
-          ),
+              name: 'username',
+              decoration: InputDecoration(labelText: 'Username'),
+              initialValue: widget.user?.username ?? '',
+              enabled: showPasswordFields || !isEditMode),
           FormBuilderTextField(
             name: 'email',
             decoration: InputDecoration(labelText: 'Email'),
+            initialValue: widget.user?.email ?? '',
+            enabled: showPasswordFields ||
+                !isEditMode, // Enable if in edit mode or creating new user
             validator: (value) {
               if (value == null || value.isEmpty) {
                 return 'Please enter an email';
@@ -105,21 +144,31 @@ class _UserDetailsScreenState extends State<UserDetailsScreen> {
             },
           ),
           FormBuilderTextField(
-            name: 'phone',
-            decoration: InputDecoration(labelText: 'Phone'),
-          ),
-          FormBuilderTextField(
-            name: 'password',
-            decoration: InputDecoration(labelText: 'Password'),
-          ),
-          FormBuilderTextField(
-            name: 'passwordConfirmation',
-            decoration: InputDecoration(labelText: 'Confirm Password'),
-          ),
+              name: 'phone',
+              decoration: InputDecoration(labelText: 'Phone'),
+              initialValue: widget.user?.phone ?? '',
+              enabled: showPasswordFields ||
+                  !isEditMode // Enable if in edit mode or creating new user
+              ),
+          if (showPasswordFields || !isEditMode) ...[
+            FormBuilderTextField(
+              name: 'password',
+              decoration: InputDecoration(labelText: 'Password'),
+              enabled: !isEditMode ||
+                  showPasswordFields, // Enable if not in edit mode or if showPasswordFields is true
+            ),
+            FormBuilderTextField(
+              name: 'passwordConfirmation',
+              decoration: InputDecoration(labelText: 'Confirm Password'),
+              enabled: !isEditMode ||
+                  showPasswordFields, // Enable if not in edit mode or if showPasswordFields is true
+            ),
+          ],
           FormBuilderDropdown<bool>(
             name: 'status',
             decoration: InputDecoration(labelText: 'Status'),
-            items: [
+            initialValue: widget.user?.status,
+            items: const [
               DropdownMenuItem(
                 value: true,
                 child: Text('Active'),
@@ -133,6 +182,7 @@ class _UserDetailsScreenState extends State<UserDetailsScreen> {
           FormBuilderDropdown<int>(
             name: 'roleIdList',
             decoration: InputDecoration(labelText: 'Role'),
+            initialValue: _selectedRoleId,
             items: _roleResult?.result
                     ?.map((role) => DropdownMenuItem(
                           value: role.roleId!,
@@ -173,18 +223,55 @@ class _UserDetailsScreenState extends State<UserDetailsScreen> {
       updatedData['username'] = updatedData['username'].toString();
       updatedData['email'] = updatedData['email'].toString();
       updatedData['phone'] = updatedData['phone'].toString();
-      updatedData['password'] = updatedData['password'].toString();
-      updatedData['passwordConfirmation'] =
-          updatedData['passwordConfirmation'].toString();
-      print('Final data to be sent to the database: $updatedData');
+
+      // Only include password fields if they are not empty
+      if (updatedData['password'] != null &&
+          updatedData['password'].isNotEmpty) {
+        updatedData['password'] = updatedData['password'].toString();
+      } else {
+        updatedData.remove('password');
+      }
+      if (updatedData['passwordConfirmation'] != null &&
+          updatedData['passwordConfirmation'].isNotEmpty) {
+        updatedData['passwordConfirmation'] =
+            updatedData['passwordConfirmation'].toString();
+      } else {
+        updatedData.remove('passwordConfirmation');
+      }
+
       try {
         if (widget.user != null) {
+          // If widget.user is not null, update the existing user
           await _usersProvider.update(widget.user!.userId!, updatedData);
           _showMessageDialog('Success', 'User updated successfully.');
         } else {
+          // If widget.user is null, insert the new user
+
+          // Check if username already exists
+          if (await _usersProvider
+              .checkUsernameExists(updatedData['username'])) {
+            _showMessageDialog('Error', 'Username already exists.');
+            return;
+          }
+
+          // Check if email already exists
+          if (await _usersProvider.checkEmailExists(updatedData['email'])) {
+            _showMessageDialog('Error', 'Email already exists.');
+            return;
+          }
+
+          // Check if phone already exists
+          if (await _usersProvider.checkPhoneExists(updatedData['phone'])) {
+            _showMessageDialog('Error', 'Phone already exists.');
+            return;
+          }
+
           await _usersProvider.insert(updatedData);
           _showMessageDialog('Success', 'New user added successfully.');
         }
+
+        // Reset the form after successful submission
+        _formKey.currentState?.reset();
       } catch (error) {
         _showMessageDialog('Error', 'An error occurred: $error');
       }
