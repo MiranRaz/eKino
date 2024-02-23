@@ -2,14 +2,16 @@ import 'package:ekino_admin/models/movies.dart'; // Import the Movie model
 
 class Projection {
   int? projectionId;
-  DateTime dateOfProjection; // Change the type to DateTime
+  DateTime dateOfProjection;
   int? auditoriumId;
+  int? movieId;
   Movies? movie;
   double? ticketPrice;
 
   Projection(
     this.projectionId,
     this.dateOfProjection,
+    this.movieId,
     this.auditoriumId,
     this.movie,
     this.ticketPrice,
@@ -22,6 +24,7 @@ class Projection {
           ? DateTime.parse(json['dateOfProjection'] as String)
           : DateTime.now(),
       json['auditoriumId'] as int?,
+      json['movieId'] as int?,
       json['movie'] != null
           ? Movies.fromJson(json['movie'] as Map<String, dynamic>)
           : null,
@@ -34,6 +37,7 @@ class Projection {
       'projectionId': projectionId,
       'dateOfProjection': dateOfProjection,
       'auditoriumId': auditoriumId,
+      'movieId': movieId,
       'movie': movie != null ? movie!.toJson() : null,
       'ticketPrice': ticketPrice,
     };

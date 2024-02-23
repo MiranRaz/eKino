@@ -7,6 +7,7 @@ import 'package:ekino_admin/providers/users_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:provider/provider.dart';
+import 'package:intl/intl.dart';
 
 class ReservationDetailsScreen extends StatefulWidget {
   final Reservation? reservation;
@@ -112,6 +113,7 @@ class _ReservationDetailsScreenState extends State<ReservationDetailsScreen> {
                         ))
                     .toList() ??
                 [],
+            enabled: false,
           ),
           FormBuilderDropdown<String>(
             name: 'projectionId',
@@ -125,16 +127,34 @@ class _ReservationDetailsScreenState extends State<ReservationDetailsScreen> {
                     )
                     .toList() ??
                 [],
+            enabled: false,
+          ),
+          FormBuilderTextField(
+            name: 'dateOfProjection',
+            decoration: InputDecoration(labelText: "Date of Projection"),
+            initialValue: _projectionsList
+                        ?.firstWhere((projection) =>
+                            projection.projectionId.toString() ==
+                            _initialValue['projectionId'])
+                        ?.dateOfProjection !=
+                    null
+                ? DateFormat('dd.MM.yyyy HH:mm').format(_projectionsList!
+                    .firstWhere((projection) =>
+                        projection.projectionId.toString() ==
+                        _initialValue['projectionId'])
+                    .dateOfProjection!)
+                : 'Unknown',
+            enabled: false,
           ),
           FormBuilderTextField(
             name: 'row',
             decoration: InputDecoration(labelText: "Row"),
-            enabled: false, // Disable the text field
+            enabled: false,
           ),
           FormBuilderTextField(
             name: 'numTickets',
             decoration: InputDecoration(labelText: "Number of Tickets"),
-            enabled: false, // Disable the text field
+            enabled: false,
           ),
         ],
       ),
@@ -153,7 +173,7 @@ class _ReservationDetailsScreenState extends State<ReservationDetailsScreen> {
           ),
           SizedBox(height: 16),
           CustomPaint(
-            size: Size(1200, 10), // Adjust size as needed
+            size: Size(1200, 10),
             painter: ScreenPainter(),
           ),
           SizedBox(height: 48),
@@ -165,22 +185,22 @@ class _ReservationDetailsScreenState extends State<ReservationDetailsScreen> {
           GridView.builder(
             shrinkWrap: true,
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 8, // Reduced number of columns
+              crossAxisCount: 8,
               mainAxisSpacing: 8.0,
               crossAxisSpacing: 8,
-              childAspectRatio: 5, // Adjust aspect ratio as needed
+              childAspectRatio: 5,
             ),
-            itemCount: 40, // Reduced total number of seats
+            itemCount: 40,
             itemBuilder: (context, index) {
-              final row = index ~/ 8; // Row index
-              final column = index % 8; // Column index
+              final row = index ~/ 8;
+              final column = index % 8;
               final seatRow = String.fromCharCode(65 + row);
               final seatColumn = column + 1;
 
-              // Check if the seat belongs to any reservation
               final isReserved = allReservations?.any((reservation) =>
-                      reservation.row?.contains('${seatRow}${seatColumn}') ??
-                      false) ??
+                      reservation.row!.contains('${seatRow}${seatColumn}') &&
+                      reservation.projectionId ==
+                          int.parse(_initialValue['projectionId'])) ??
                   false;
 
               final currentUserReservation = widget.reservation;
@@ -188,16 +208,6 @@ class _ReservationDetailsScreenState extends State<ReservationDetailsScreen> {
                   currentUserReservation.row
                           ?.contains('${seatRow}${seatColumn}') ==
                       true;
-
-              final isOtherReservation = allReservations?.any((reservation) {
-                    if (reservation != currentUserReservation) {
-                      return reservation.row
-                              ?.contains('${seatRow}${seatColumn}') ==
-                          true;
-                    }
-                    return false;
-                  }) ??
-                  false;
 
               return GestureDetector(
                 onTap: () {
