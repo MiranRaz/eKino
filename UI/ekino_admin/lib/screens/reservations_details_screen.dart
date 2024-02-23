@@ -30,7 +30,6 @@ class _ReservationDetailsScreenState extends State<ReservationDetailsScreen> {
   bool isLoading = true;
   late List<List<bool>> seats;
   List<String> selectedRows = [];
-  List<int> selectedColumns = [];
 
   List<Reservation>? allReservations; // Added to store all reservations
 
@@ -45,7 +44,6 @@ class _ReservationDetailsScreenState extends State<ReservationDetailsScreen> {
       "userId": widget.reservation?.userId?.toString(),
       "projectionId": widget.reservation?.projectionId.toString(),
       "row": widget.reservation?.row ?? '',
-      "column": widget.reservation?.column ?? '',
       "numTickets": widget.reservation?.numTickets ?? '',
     };
     initForm();
@@ -131,58 +129,15 @@ class _ReservationDetailsScreenState extends State<ReservationDetailsScreen> {
           FormBuilderTextField(
             name: 'row',
             decoration: InputDecoration(labelText: "Row"),
-          ),
-          FormBuilderTextField(
-            name: 'column',
-            decoration: InputDecoration(labelText: "Column"),
+            enabled: false, // Disable the text field
           ),
           FormBuilderTextField(
             name: 'numTickets',
             decoration: InputDecoration(labelText: "Number of Tickets"),
-          ),
-          const SizedBox(height: 24),
-          ElevatedButton(
-            onPressed: () async {
-              _formKey.currentState?.save();
-              final formData = _formKey.currentState?.value;
-              if (formData != null) {
-                try {
-                  await _saveReservation(formData);
-                } catch (error) {
-                  print('Error: $error');
-                  _showMessageDialog('Error', 'An error occurred: $error');
-                }
-              }
-            },
-            child: Text(widget.reservation != null ? 'Update' : 'Save'),
+            enabled: false, // Disable the text field
           ),
         ],
       ),
-    );
-  }
-
-  Future<void> _saveReservation(Map<String, dynamic> formData) async {}
-
-  Future<void> _showMessageDialog(String title, String message) async {
-    return showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text(title),
-          content: Text(message),
-          actions: <Widget>[
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-                if (title.contains('Success')) {
-                  Navigator.of(context).pop();
-                }
-              },
-              child: const Text('OK'),
-            ),
-          ],
-        );
-      },
     );
   }
 
@@ -223,58 +178,63 @@ class _ReservationDetailsScreenState extends State<ReservationDetailsScreen> {
               final seatColumn = column + 1;
 
               // Check if the seat belongs to any reservation
-              final isReserved = allReservations?.any((reservation) {
-                    final rowList = reservation.row?.split(',') ?? [];
-                    final columnList = reservation.column?.split(',') ?? [];
-                    if (rowList.isNotEmpty &&
-                        columnList.isNotEmpty &&
-                        rowList.length == columnList.length) {
-                      return rowList.asMap().entries.any((entry) {
-                        final rowIndex = entry.key;
-                        final rowValue = entry.value;
-                        final columnValue =
-                            int.tryParse(columnList.elementAt(rowIndex));
-                        return seatRow == rowValue && seatColumn == columnValue;
-                      });
-                    }
-                    return false;
-                  }) ??
+              final isReserved = allReservations?.any((reservation) =>
+                      reservation.row?.contains('${seatRow}${seatColumn}') ??
+                      false) ??
                   false;
 
               final currentUserReservation = widget.reservation;
               final currentUserReserved = currentUserReservation != null &&
                   currentUserReservation.row
-                          ?.split(',')
-                          .asMap()
-                          .entries
-                          .any((entry) {
-                        final rowIndex = entry.key;
-                        final rowValue = entry.value;
-                        final columnList =
-                            currentUserReservation.column?.split(',') ?? [];
-                        if (columnList.isNotEmpty &&
-                            rowIndex < columnList.length) {
-                          final columnValue =
-                              int.tryParse(columnList[rowIndex]);
-                          return seatRow == rowValue &&
-                              seatColumn == columnValue;
-                        }
-                        return false;
-                      }) ==
+                          ?.contains('${seatRow}${seatColumn}') ==
                       true;
+
+              final isOtherReservation = allReservations?.any((reservation) {
+                    if (reservation != currentUserReservation) {
+                      return reservation.row
+                              ?.contains('${seatRow}${seatColumn}') ==
+                          true;
+                    }
+                    return false;
+                  }) ??
+                  false;
 
               return GestureDetector(
                 onTap: () {
                   setState(() {
-                    // You can add logic here if needed
+                    final seatValue = '${seatRow}${seatColumn}';
+                    final List<String> rowValues = _initialValue['row']
+                        .split(',')
+                        .toList(); // Convert to list
+                    final isSelected = rowValues.contains(seatValue);
+                    if (isReserved && !isSelected) {
+                      // Do nothing if the seat is reserved and not already selected
+                      return;
+                    }
+                    if (isSelected) {
+                      // If the clicked seat is already selected, remove it
+                      rowValues.remove(seatValue);
+                    } else {
+                      // Otherwise, add or keep it in the row
+                      rowValues.add(seatValue);
+                    }
+                    // Update the 'row' value with all selected seats
+                    final rowValue = rowValues.join(',');
+                    _formKey.currentState?.fields['row']?.didChange(rowValue);
+                    // Assign the updated row values back to _initialValue
+                    _initialValue['row'] = rowValue;
+                    // Toggle the seat selection
+                    seats[row][column] = !isSelected;
                   });
                 },
                 child: Container(
                   color: currentUserReserved
-                      ? Colors.green // Current user's reservation
+                      ? (seats[row][column] ? Colors.grey : Colors.green)
                       : (isReserved
                           ? Colors.red
-                          : Colors.grey), // Other reservations
+                          : (seats[row][column]
+                              ? Colors.blue
+                              : Colors.grey)), // Adjust colors as needed
                   child: Center(
                     child: Text(
                       '${String.fromCharCode(65 + row)}${column + 1}',

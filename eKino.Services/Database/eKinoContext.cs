@@ -770,9 +770,9 @@ namespace eKino.Services.Database
                 ReservationId = ++ReservationID,
                 ProjectionId = 1,
                 UserId = 3,
-                Row = "3",
-                Column = "3",
-                NumTicket = "2",
+                Row = "A1,A2,B1",
+                Column = "x",
+                NumTicket = "3",
                 DateOfReservation = new DateTime(2022, 9, 11, 15, 18, 30)
             });
             modelBuilder.Entity<Reservation>().HasData(new Reservation()
@@ -780,9 +780,9 @@ namespace eKino.Services.Database
                 ReservationId = ++ReservationID,
                 ProjectionId = 2,
                 UserId = 3,
-                Row = "2",
-                Column = "2",
-                NumTicket = "2",
+                Row = "C1,D2,E1",
+                Column = "x",
+                NumTicket = "3",
                 DateOfReservation = new DateTime(2022, 9, 12, 15, 20, 0)
             });
             modelBuilder.Entity<Reservation>().HasData(new Reservation()
@@ -790,9 +790,9 @@ namespace eKino.Services.Database
                 ReservationId = ++ReservationID,
                 ProjectionId = 3,
                 UserId = 3,
-                Row = "1",
-                Column = "2",
-                NumTicket = "1",
+                Row = "E4,E5",
+                Column = "x",
+                NumTicket = "3",
                 DateOfReservation = new DateTime(2022, 9, 13, 15, 15, 0)
             });
 

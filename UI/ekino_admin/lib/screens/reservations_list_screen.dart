@@ -74,13 +74,6 @@ class _ReservationsListScreenState extends State<ReservationsListScreen> {
             DataColumn(
               label: Expanded(
                 child: Text(
-                  'Column',
-                ),
-              ),
-            ),
-            DataColumn(
-              label: Expanded(
-                child: Text(
                   'Number of Tickets',
                 ),
               ),
@@ -119,11 +112,6 @@ class _ReservationsListScreenState extends State<ReservationsListScreen> {
                     DataCell(
                       SingleChildScrollView(
                         child: Text(reservation.row ?? ""),
-                      ),
-                    ),
-                    DataCell(
-                      SingleChildScrollView(
-                        child: Text(reservation.column ?? ""),
                       ),
                     ),
                     DataCell(
