@@ -87,7 +87,7 @@ class _ProjectionDetailsScreenState extends State<ProjectionDetailsScreen> {
           FormBuilderDateTimePicker(
             name: 'dateOfProjection',
             decoration: InputDecoration(labelText: "Date of Projection"),
-            inputType: InputType.date,
+            inputType: InputType.both,
             format: DateFormat('yyyy-MM-dd HH:mm'),
           ),
           FormBuilderDropdown<String>(
@@ -158,9 +158,11 @@ class _ProjectionDetailsScreenState extends State<ProjectionDetailsScreen> {
         auditoriumId != null &&
         ticketPrice != null &&
         dateOfProjection != null) {
+      final String iso8601DateOfProjection = dateOfProjection.toIso8601String();
+
       // Create a map to represent the projection data
       final Map<String, dynamic> projectionData = {
-        'dateOfProjection': dateOfProjection.toIso8601String(),
+        'dateOfProjection': iso8601DateOfProjection,
         'movieId': movieId,
         'auditoriumId': auditoriumId,
         'ticketPrice': ticketPrice,

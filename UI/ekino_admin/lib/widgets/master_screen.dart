@@ -1,4 +1,5 @@
 import 'package:ekino_admin/main.dart';
+import 'package:ekino_admin/screens/reservations_list_screen.dart';
 import 'package:ekino_admin/screens/upcoming_details_screen.dart';
 import 'package:ekino_admin/screens/users_details_screen.dart';
 import 'package:flutter/material.dart';
@@ -47,6 +48,15 @@ class _MasterScreenWidgetState extends State<MasterScreenWidget> {
               onTap: () {
                 Navigator.of(context).push(MaterialPageRoute(
                   builder: (context) => const ProjectionDetailsScreen(),
+                ));
+              },
+            ),
+            Divider(),
+            ListTile(
+              title: const Text("Reservations"),
+              onTap: () {
+                Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => const ReservationsListScreen(),
                 ));
               },
             ),

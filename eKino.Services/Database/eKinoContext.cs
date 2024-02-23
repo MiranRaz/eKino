@@ -133,7 +133,7 @@ namespace eKino.Services.Database
 
                 entity.Property(e => e.AuditoriumId).HasColumnName("AuditoriumID");
 
-                entity.Property(e => e.DateOfProjection).HasColumnType("date");
+                entity.Property(e => e.DateOfProjection).HasColumnType("datetime");
 
                 entity.Property(e => e.MovieId).HasColumnName("MovieID");
 
@@ -185,7 +185,7 @@ namespace eKino.Services.Database
 
                 entity.Property(e => e.Column).HasMaxLength(50);
 
-                entity.Property(e => e.DateOfReservation).HasColumnType("date");
+                entity.Property(e => e.DateOfReservation).HasColumnType("datetime");
 
                 entity.Property(e => e.NumTicket).HasMaxLength(50);
 
@@ -750,14 +750,16 @@ namespace eKino.Services.Database
                 // Generate a random number of days between 1 and 30
                 Random rnd = new Random();
                 int randomDays = rnd.Next(1, 31);
+                int randomHours = rnd.Next(1, 24);
+                int randomMinutes = rnd.Next(1, 60);
 
                 modelBuilder.Entity<Projection>().HasData(new Projection()
                 {
                     ProjectionId = ++ProjectionID,
-                    DateOfProjection = DateTime.Now.AddDays(randomDays), // Add random number of days to current date
+                    DateOfProjection = DateTime.Now.AddDays(randomDays).AddHours(randomHours).AddMinutes(randomMinutes),
                     AuditoriumId = (ProjectionID % 5) + 1,
                     MovieId = ProjectionID,
-                    TicketPrice = 5.00m
+                    TicketPrice = 5.50m
                 });
             }
 
@@ -768,20 +770,20 @@ namespace eKino.Services.Database
                 ReservationId = ++ReservationID,
                 ProjectionId = 1,
                 UserId = 3,
-                Row = "1",
-                Column = "1",
+                Row = "3",
+                Column = "3",
                 NumTicket = "2",
-                DateOfReservation = new DateTime(2022, 9, 11, 15, 0, 0)
+                DateOfReservation = new DateTime(2022, 9, 11, 15, 18, 30)
             });
             modelBuilder.Entity<Reservation>().HasData(new Reservation()
             {
                 ReservationId = ++ReservationID,
                 ProjectionId = 2,
                 UserId = 3,
-                Row = "1",
-                Column = "1",
+                Row = "2",
+                Column = "2",
                 NumTicket = "2",
-                DateOfReservation = new DateTime(2022, 9, 12, 15, 0, 0)
+                DateOfReservation = new DateTime(2022, 9, 12, 15, 20, 0)
             });
             modelBuilder.Entity<Reservation>().HasData(new Reservation()
             {
@@ -789,9 +791,9 @@ namespace eKino.Services.Database
                 ProjectionId = 3,
                 UserId = 3,
                 Row = "1",
-                Column = "1",
+                Column = "2",
                 NumTicket = "1",
-                DateOfReservation = new DateTime(2022, 9, 13, 15, 0, 0)
+                DateOfReservation = new DateTime(2022, 9, 13, 15, 15, 0)
             });
 
             #endregion

@@ -2,6 +2,7 @@ import 'package:ekino_admin/providers/auditorium_provider.dart';
 import 'package:ekino_admin/providers/directors_provider.dart';
 import 'package:ekino_admin/providers/movies_provider.dart';
 import 'package:ekino_admin/providers/projections_provider.dart';
+import 'package:ekino_admin/providers/reservation_provider.dart';
 import 'package:ekino_admin/providers/role_provider.dart';
 import 'package:ekino_admin/providers/users_provider.dart';
 import 'package:ekino_admin/screens/upcoming_screen.dart';
@@ -18,6 +19,7 @@ void main() {
       ChangeNotifierProvider(create: (_) => UsersProvider()),
       ChangeNotifierProvider(create: (_) => RoleProvider()),
       ChangeNotifierProvider(create: (_) => AuditoriumProvider()),
+      ChangeNotifierProvider(create: (_) => ReservationProvider()),
     ],
     child: const MyMaterialApp(),
   ));
