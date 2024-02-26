@@ -788,12 +788,22 @@ namespace eKino.Services.Database
             modelBuilder.Entity<Reservation>().HasData(new Reservation()
             {
                 ReservationId = ++ReservationID,
-                ProjectionId = 3,
+                ProjectionId = 2,
                 UserId = 3,
                 Row = "E4,E5",
                 Column = "x",
-                NumTicket = "3",
+                NumTicket = "2",
                 DateOfReservation = new DateTime(2022, 9, 13, 15, 15, 0)
+            });
+            modelBuilder.Entity<Reservation>().HasData(new Reservation()
+            {
+                ReservationId = ++ReservationID,
+                ProjectionId = 3,
+                UserId = 4,
+                Row = "D4,D5",
+                Column = "x",
+                NumTicket = "2",
+                DateOfReservation = new DateTime(2022, 9, 14, 16, 30, 0)
             });
 
             #endregion

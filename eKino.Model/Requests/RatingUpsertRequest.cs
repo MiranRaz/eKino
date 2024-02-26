@@ -12,7 +12,7 @@ namespace eKino.Model.Requests
         [Required]
         public int MovieId { get; set; }
         [Required]
-        [Range(minimum: 1, maximum: 5)]
+        [Range(minimum: 1, maximum: 10)]
         public int Value { get; set; }
     }
 }

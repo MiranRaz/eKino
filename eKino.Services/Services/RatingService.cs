@@ -18,7 +18,7 @@ namespace eKino.Services.Services
         {
         }
 
-        public override IQueryable<Database.Rating> AddFilter(IQueryable<Database.Rating> query, RatingSearchObject search = null)
+        public override IQueryable<Database.Rating> AddFilter(IQueryable<Database.Rating> query, RatingSearchObject? search = null)
         {
             var filteredQuery = base.AddFilter(query, search);
 
@@ -33,6 +33,12 @@ namespace eKino.Services.Services
             }
 
             return filteredQuery;
+        }
+        public override IQueryable<Database.Rating> AddInclude(IQueryable<Database.Rating> query, RatingSearchObject search = null)
+        {
+            query = query.Include(x => x.User);
+            query = query.Include(x => x.Movie);
+            return base.AddInclude(query, search);
         }
 
     }
