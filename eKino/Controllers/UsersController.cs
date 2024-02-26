@@ -49,7 +49,7 @@ public class UsersController : BaseCRUDController<eKino.Model.User, UserSearchOb
 
     [HttpGet("getusername/{username}")]
     [AllowAnonymous]
-    public async Task<bool> GetUserByUsername(string username)
+    public async Task<User> GetUserByUsername(string username)
     {
         return await ((UserService)_service).GetUserByUsername(username);
     }

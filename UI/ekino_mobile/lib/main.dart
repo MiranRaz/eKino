@@ -1,6 +1,10 @@
+import 'package:ekino_mobile/providers/auditorium_provider.dart';
 import 'package:ekino_mobile/providers/directors_provider.dart';
 import 'package:ekino_mobile/providers/movies_provider.dart';
-import 'package:ekino_mobile/screens/movies_list_screen.dart';
+import 'package:ekino_mobile/providers/projections_provider.dart';
+import 'package:ekino_mobile/providers/reservation_provider.dart';
+import 'package:ekino_mobile/providers/users_provider.dart';
+import 'package:ekino_mobile/screens/upcoming_screen.dart';
 import 'package:ekino_mobile/utils/util.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -10,6 +14,10 @@ void main() {
     providers: [
       ChangeNotifierProvider(create: (_) => MoviesProvider()),
       ChangeNotifierProvider(create: (_) => DirectorsProvider()),
+      ChangeNotifierProvider(create: (_) => ProjectionsProvider()),
+      ChangeNotifierProvider(create: (_) => ReservationProvider()),
+      ChangeNotifierProvider(create: (_) => UsersProvider()),
+      ChangeNotifierProvider(create: (_) => AuditoriumProvider()),
     ],
     child: const MyMaterialApp(),
   ));
@@ -89,7 +97,7 @@ class LoginPage extends StatelessWidget {
                       await _moviesProvider.get();
 
                       Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => const MoviesListScreen()));
+                          builder: (context) => const UpcomingScreen()));
                     } on Exception catch (e) {
                       showDialog(
                           context: context,

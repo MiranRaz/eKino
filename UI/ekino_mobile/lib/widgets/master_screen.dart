@@ -1,6 +1,6 @@
 import 'package:ekino_mobile/main.dart';
-import 'package:ekino_mobile/screens/movies_details_screen.dart';
-import 'package:ekino_mobile/screens/movies_list_screen.dart';
+import 'package:ekino_mobile/screens/reservations_my_list_screen.dart';
+import 'package:ekino_mobile/screens/upcoming_screen.dart';
 import 'package:flutter/material.dart';
 
 class MasterScreenWidget extends StatefulWidget {
@@ -12,8 +12,8 @@ class MasterScreenWidget extends StatefulWidget {
     this.child,
     this.title,
     this.title_widget,
-    super.key,
-  });
+    Key? key,
+  }) : super(key: key);
 
   @override
   State<MasterScreenWidget> createState() => _MasterScreenWidgetState();
@@ -23,40 +23,51 @@ class _MasterScreenWidgetState extends State<MasterScreenWidget> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(title: widget.title_widget ?? Text(widget.title ?? "")),
-        drawer: Drawer(
-            child: ListView(
+      appBar: AppBar(title: widget.title_widget ?? Text(widget.title ?? "")),
+      drawer: Drawer(
+        child: Column(
           children: [
-            ListTile(
-              title: const Text("Logout"),
-              onTap: () {
-                Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => const MyMaterialApp()));
-              },
+            const SizedBox(
+              height: 64,
             ),
             ListTile(
-              title: const Text("Movies"),
+              title: const Text("Upcoming projections"),
               onTap: () {
                 Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => const MoviesListScreen()));
+                  builder: (context) => const UpcomingScreen(),
+                ));
               },
             ),
+            Divider(),
             ListTile(
-              title: const Text("Movies details"),
+              title: const Text("My reservations"),
               onTap: () {
                 Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => MoviesDetailsScreen()));
+                  builder: (context) => const ReservationsListScreen(),
+                ));
               },
             ),
-            // ListTile(
-            //   title: const Text("Directors"),
-            //   onTap: () {
-            //     Navigator.of(context).push(MaterialPageRoute(
-            //         builder: (context) => const DirectorsListScreen()));
-            //   },
-            // ),
+            Divider(),
+            Expanded(
+              child: Align(
+                alignment: Alignment.bottomCenter,
+                child: ListTile(
+                  title: const Text("Logout"),
+                  onTap: () {
+                    Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => const MyMaterialApp(),
+                    ));
+                  },
+                ),
+              ),
+            ),
+            const SizedBox(
+              height: 124,
+            ),
           ],
-        )),
-        body: widget.child);
+        ),
+      ),
+      body: widget.child,
+    );
   }
 }

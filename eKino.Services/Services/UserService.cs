@@ -19,9 +19,10 @@ namespace eKino.Services.Services
         {
         }
 
-        public async Task<bool> GetUserByUsername(string username)
+        public async Task<Model.User?> GetUserByUsername(string username)
         {
-            return await _context.Users.AnyAsync(u => u.Username == username);
+            var userEntity = await _context.Users.FirstOrDefaultAsync(u => u.Username == username);
+            return userEntity != null ? _mapper.Map<Model.User>(userEntity) : null;
         }
 
         public async Task<bool> UsernameExists(string username)
