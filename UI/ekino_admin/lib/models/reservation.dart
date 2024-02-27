@@ -8,7 +8,7 @@ class Reservation {
   int? projectionId;
   String? row;
   String? column;
-  String? numTickets;
+  String? numTicket;
 
   Reservation(
     this.reservationId,
@@ -16,7 +16,7 @@ class Reservation {
     this.projectionId,
     this.row,
     this.column,
-    this.numTickets,
+    this.numTicket,
   );
 
   factory Reservation.fromJson(Map<String, dynamic> json) =>

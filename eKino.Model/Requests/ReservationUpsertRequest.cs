@@ -16,6 +16,6 @@ namespace eKino.Model.Requests
         [Required]
         public string Column { get; set; }
         [Required]
-        public string NumTickets { get; set; }
+        public string NumTicket { get; set; }
     }
 }

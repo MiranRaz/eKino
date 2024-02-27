@@ -45,7 +45,7 @@ class _ReservationDetailsScreenState extends State<ReservationDetailsScreen> {
       "userId": widget.reservation?.userId?.toString(),
       "projectionId": widget.reservation?.projectionId.toString(),
       "row": widget.reservation?.row ?? '',
-      "numTickets": widget.reservation?.numTickets ?? '',
+      "numTicket": widget.reservation?.numTicket ?? '',
     };
     initForm();
     seats = List.generate(8, (_) => List.generate(8, (_) => false));
@@ -158,7 +158,7 @@ class _ReservationDetailsScreenState extends State<ReservationDetailsScreen> {
             enabled: false,
           ),
           FormBuilderTextField(
-            name: 'numTickets',
+            name: 'numTicket',
             decoration: InputDecoration(labelText: "Number of Tickets"),
             enabled: false,
           ),

@@ -12,7 +12,7 @@ Reservation _$ReservationFromJson(Map<String, dynamic> json) => Reservation(
       json['projectionId'] as int?,
       json['row'] as String?,
       json['column'] as String?,
-      json['numTickets'] as String?,
+      json['numTicket'] as String?,
     );
 
 Map<String, dynamic> _$ReservationToJson(Reservation instance) =>
@@ -22,5 +22,5 @@ Map<String, dynamic> _$ReservationToJson(Reservation instance) =>
       'projectionId': instance.projectionId,
       'row': instance.row,
       'column': instance.column,
-      'numTickets': instance.numTickets,
+      'numTicket': instance.numTicket,
     };

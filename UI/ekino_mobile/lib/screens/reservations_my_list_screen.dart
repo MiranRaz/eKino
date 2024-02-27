@@ -121,7 +121,7 @@ class _ReservationsListScreenState extends State<ReservationsListScreen> {
                   Text('Seats: ${reservation.row ?? 'Unknown'}'),
                   SizedBox(height: 4.0),
                   Text(
-                      'Number of Tickets: ${reservation.numTickets ?? 'Unknown'}'),
+                      'Number of Tickets: ${reservation.numTicket ?? 'Unknown'}'),
                   SizedBox(height: 4.0),
                   FutureBuilder<String>(
                     future: _fetchUserName(context, reservation.userId!),

@@ -1,7 +1,7 @@
 import 'package:ekino_mobile/models/reservation.dart';
-import 'package:ekino_mobile/providers/projections_provider.dart';
 import 'package:ekino_mobile/providers/reservation_provider.dart';
-import 'package:ekino_mobile/providers/users_provider.dart';
+import 'package:ekino_mobile/screens/paypal_home_screen.dart';
+import 'package:ekino_mobile/screens/reservations_my_list_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:ekino_mobile/models/projection.dart';
 import 'package:ekino_mobile/models/user.dart';
@@ -26,8 +26,7 @@ class NewReservationScreen extends StatefulWidget {
 class _NewReservationScreenState extends State<NewReservationScreen> {
   final _formKey = GlobalKey<FormBuilderState>();
   late Map<String, dynamic> _initialValue;
-  late UsersProvider _usersProvider;
-  late ProjectionsProvider _projectionsProvider;
+  late Map<String, dynamic> _saveValue;
   late ReservationProvider _reservationProvider;
   bool isLoading = true;
   late List<List<bool>> seats;
@@ -37,15 +36,13 @@ class _NewReservationScreenState extends State<NewReservationScreen> {
   @override
   void initState() {
     super.initState();
-    _usersProvider = context.read<UsersProvider>();
-    _projectionsProvider = context.read<ProjectionsProvider>();
     _reservationProvider = context.read<ReservationProvider>();
 
     _initialValue = {
       "userId": widget.currentUser?.userId?.toString(),
       "projectionId": widget.projection?.projectionId.toString(),
       "row": '',
-      "numTickets": '0',
+      "numTicket": '0',
     };
     initForm();
     seats = List.generate(8, (_) => List.generate(8, (_) => false));
@@ -90,11 +87,44 @@ class _NewReservationScreenState extends State<NewReservationScreen> {
               SizedBox(height: 48),
               _buildSeatPicker(),
               SizedBox(height: 20),
+              ElevatedButton(
+                // Button to save reservation
+                onPressed: _saveReservation,
+                child: const Text('Proceed to checkout'),
+              ),
             ],
           ),
         ),
       ),
     );
+  }
+
+  void _saveReservation() async {
+    try {
+      _saveValue = {
+        "userId": widget.currentUser.userId.toString(),
+        "projectionId": widget.projection.projectionId.toString(),
+        "row": _initialValue['row'],
+        "column": "x",
+        "numTicket": "2",
+      };
+      // await _reservationProvider.insert(_saveValue);
+      // ScaffoldMessenger.of(context).showSnackBar(
+      //   SnackBar(content: Text('Reservation saved successfully')),
+      // );
+
+      // Navigate to PaymentScreen with _saveValue as props
+      Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (context) => PaypalHomeScreen(
+              reservationSaveValue: _saveValue, projection: widget.projection),
+        ),
+      );
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Failed to save reservation: $e')),
+      );
+    }
   }
 
   Widget _buildForm() {
@@ -103,8 +133,8 @@ class _NewReservationScreenState extends State<NewReservationScreen> {
       initialValue: _initialValue,
       onChanged: () {
         // Update the number of tickets based on selected seats
-        final numTickets = _initialValue['row'].split(',').length.toString();
-        _formKey.currentState?.fields['numTickets']?.didChange(numTickets);
+        final numTicket = _initialValue['row'].split(',').length.toString();
+        _formKey.currentState?.fields['numTicket']?.didChange(numTicket);
       },
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -130,7 +160,7 @@ class _NewReservationScreenState extends State<NewReservationScreen> {
           ),
           SizedBox(height: 10),
           Text(
-            'Number of Tickets: ${_initialValue['numTickets']}',
+            'Number of Tickets: ${_initialValue['numTicket']}',
             style: TextStyle(fontSize: 16),
           ),
         ],

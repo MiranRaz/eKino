@@ -113,7 +113,7 @@ class _ReservationsListScreenState extends State<ReservationsListScreen> {
                     ),
                     DataCell(
                       SingleChildScrollView(
-                        child: Text(reservation.numTickets ?? ""),
+                        child: Text(reservation.numTicket ?? ""),
                       ),
                     ),
                     DataCell(
