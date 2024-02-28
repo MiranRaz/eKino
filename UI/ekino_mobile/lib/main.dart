@@ -7,9 +7,17 @@ import 'package:ekino_mobile/providers/users_provider.dart';
 import 'package:ekino_mobile/screens/upcoming_screen.dart';
 import 'package:ekino_mobile/utils/util.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter/material.dart' as FlutterMaterial;
 
-void main() {
+import '.env';
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  Stripe.publishableKey = stripePublishableKey;
+  await Stripe.instance.applySettings();
+
   runApp(MultiProvider(
     providers: [
       ChangeNotifierProvider(create: (_) => MoviesProvider()),
@@ -57,7 +65,7 @@ class LoginPage extends StatelessWidget {
       body: Center(
           child: Container(
         constraints: const BoxConstraints(maxWidth: 400, maxHeight: 400),
-        child: Card(
+        child: FlutterMaterial.Card(
           child: Padding(
             padding: const EdgeInsets.all(16.0),
             child: Column(children: [

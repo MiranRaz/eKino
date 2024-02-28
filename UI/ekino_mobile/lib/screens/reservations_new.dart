@@ -1,6 +1,6 @@
 import 'package:ekino_mobile/models/reservation.dart';
 import 'package:ekino_mobile/providers/reservation_provider.dart';
-import 'package:ekino_mobile/screens/paypal_home_screen.dart';
+import 'package:ekino_mobile/screens/payment_home_screen.dart';
 import 'package:ekino_mobile/screens/reservations_my_list_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:ekino_mobile/models/projection.dart';
@@ -32,6 +32,7 @@ class _NewReservationScreenState extends State<NewReservationScreen> {
   late List<List<bool>> seats;
 
   List<Reservation>? allReservations; // Added to store all reservations
+  late String numTicket = '0';
 
   @override
   void initState() {
@@ -42,7 +43,7 @@ class _NewReservationScreenState extends State<NewReservationScreen> {
       "userId": widget.currentUser?.userId?.toString(),
       "projectionId": widget.projection?.projectionId.toString(),
       "row": '',
-      "numTicket": '0',
+      "numTicket": numTicket,
     };
     initForm();
     seats = List.generate(8, (_) => List.generate(8, (_) => false));
@@ -106,7 +107,7 @@ class _NewReservationScreenState extends State<NewReservationScreen> {
         "projectionId": widget.projection.projectionId.toString(),
         "row": _initialValue['row'],
         "column": "x",
-        "numTicket": "2",
+        "numTicket": numTicket,
       };
       // await _reservationProvider.insert(_saveValue);
       // ScaffoldMessenger.of(context).showSnackBar(
@@ -116,7 +117,7 @@ class _NewReservationScreenState extends State<NewReservationScreen> {
       // Navigate to PaymentScreen with _saveValue as props
       Navigator.of(context).push(
         MaterialPageRoute(
-          builder: (context) => PaypalHomeScreen(
+          builder: (context) => PaymentHomeScreen(
               reservationSaveValue: _saveValue, projection: widget.projection),
         ),
       );
@@ -131,11 +132,6 @@ class _NewReservationScreenState extends State<NewReservationScreen> {
     return FormBuilder(
       key: _formKey,
       initialValue: _initialValue,
-      onChanged: () {
-        // Update the number of tickets based on selected seats
-        final numTicket = _initialValue['row'].split(',').length.toString();
-        _formKey.currentState?.fields['numTicket']?.didChange(numTicket);
-      },
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
@@ -160,7 +156,7 @@ class _NewReservationScreenState extends State<NewReservationScreen> {
           ),
           SizedBox(height: 10),
           Text(
-            'Number of Tickets: ${_initialValue['numTicket']}',
+            'Number of Tickets: $numTicket',
             style: TextStyle(fontSize: 16),
           ),
         ],
@@ -218,16 +214,21 @@ class _NewReservationScreenState extends State<NewReservationScreen> {
                       final selectedSeats =
                           _initialValue['row']?.split(',') ?? [];
                       if (isSelected!) {
-                        // If already selected, remove it from the list
                         selectedSeats.remove(seatValue);
                       } else {
-                        selectedSeats.add(seatValue); // Add to the list
+                        selectedSeats.add(seatValue);
+                      }
+                      _initialValue['row'] = selectedSeats.join(',');
+                      if (!isSelected!) {
+                        numTicket = (int.parse(numTicket) + 1).toString();
+                      } else {
+                        numTicket = (int.parse(numTicket) - 1).toString();
                       }
                       _formKey.currentState?.fields['row']
-                          ?.didChange(selectedSeats.join(','));
-                      _initialValue['row'] = selectedSeats.join(',');
-                      seats[row][column] =
-                          !isSelected; // Toggle selection state
+                          ?.didChange(_initialValue['row']);
+                      _formKey.currentState?.fields['numTicket']
+                          ?.didChange(numTicket);
+                      seats[row][column] = !isSelected;
                     }
                   });
                 },
