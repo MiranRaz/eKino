@@ -16,6 +16,7 @@ namespace eKino.Services.Database
         public DateTime? DateOfReservation { get; set; }
         public string? Row { get; set; }
         public string? Column { get; set; }
+        //public string? Seat { get; set; }
         public string? NumTicket { get; set; }
 
         public virtual Projection Projection { get; set; } = null!;

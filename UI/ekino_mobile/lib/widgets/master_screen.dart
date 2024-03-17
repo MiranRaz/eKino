@@ -1,6 +1,8 @@
 import 'package:ekino_mobile/main.dart';
+import 'package:ekino_mobile/screens/ratings_list_screen.dart';
 import 'package:ekino_mobile/screens/reservations_my_list_screen.dart';
 import 'package:ekino_mobile/screens/upcoming_screen.dart';
+import 'package:ekino_mobile/screens/user_profile_screen.dart';
 import 'package:flutter/material.dart';
 
 class MasterScreenWidget extends StatefulWidget {
@@ -30,6 +32,20 @@ class _MasterScreenWidgetState extends State<MasterScreenWidget> {
             const SizedBox(
               height: 64,
             ),
+            Divider(),
+            ListTile(
+              title: const Text("My Profile"),
+              onTap: () {
+                Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => const UserProfileScreen(),
+                ));
+              },
+            ),
+            Divider(),
+            const SizedBox(
+              height: 48,
+            ),
+            Divider(),
             ListTile(
               title: const Text("Upcoming projections"),
               onTap: () {
@@ -44,6 +60,15 @@ class _MasterScreenWidgetState extends State<MasterScreenWidget> {
               onTap: () {
                 Navigator.of(context).push(MaterialPageRoute(
                   builder: (context) => const ReservationsListScreen(),
+                ));
+              },
+            ),
+            Divider(),
+            ListTile(
+              title: const Text("My ratings"),
+              onTap: () {
+                Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => const RatingsListScreen(),
                 ));
               },
             ),

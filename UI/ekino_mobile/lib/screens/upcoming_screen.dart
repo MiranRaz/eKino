@@ -39,6 +39,7 @@ class _UpcomingScreenState extends State<UpcomingScreen> {
     var data = await _projectionsProvider.get(filter: {
       'MovieId': _ftsController.text,
     });
+
     setState(() {
       resultP = data;
     });
@@ -74,6 +75,14 @@ class _UpcomingScreenState extends State<UpcomingScreen> {
   Widget _buildCard(int index) {
     final Projection projection = resultP!.result[index];
     final Movies? movie = projection.movie;
+
+    // Check if the dateOfProjection is smaller than today
+    if (projection.dateOfProjection.isBefore(DateTime.now())) {
+      // If it is, return an empty container to hide the card
+      return Container();
+    }
+
+    // Otherwise, return the card widget
     return GestureDetector(
       onTap: () {
         Navigator.of(context).push(

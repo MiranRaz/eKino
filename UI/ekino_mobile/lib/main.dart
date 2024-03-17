@@ -2,7 +2,10 @@ import 'package:ekino_mobile/providers/auditorium_provider.dart';
 import 'package:ekino_mobile/providers/directors_provider.dart';
 import 'package:ekino_mobile/providers/movies_provider.dart';
 import 'package:ekino_mobile/providers/projections_provider.dart';
+import 'package:ekino_mobile/providers/rating_provider.dart';
 import 'package:ekino_mobile/providers/reservation_provider.dart';
+import 'package:ekino_mobile/providers/role_provider.dart';
+import 'package:ekino_mobile/providers/transaction_provider.dart';
 import 'package:ekino_mobile/providers/users_provider.dart';
 import 'package:ekino_mobile/screens/upcoming_screen.dart';
 import 'package:ekino_mobile/utils/util.dart';
@@ -25,7 +28,10 @@ void main() async {
       ChangeNotifierProvider(create: (_) => ProjectionsProvider()),
       ChangeNotifierProvider(create: (_) => ReservationProvider()),
       ChangeNotifierProvider(create: (_) => UsersProvider()),
+      ChangeNotifierProvider(create: (_) => RoleProvider()),
+      ChangeNotifierProvider(create: (_) => TransactionProvider()),
       ChangeNotifierProvider(create: (_) => AuditoriumProvider()),
+      ChangeNotifierProvider(create: (_) => RatingProvider()),
     ],
     child: const MyMaterialApp(),
   ));

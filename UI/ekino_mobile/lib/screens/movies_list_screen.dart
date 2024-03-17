@@ -63,7 +63,7 @@ class _MoviesListScreenState extends State<MoviesListScreen> {
           onPressed: () async {
             // Navigator.of(context).pop();
             var data = await _moviesProvider.get(filter: {
-              'fts': _ftsController.text,
+              'FTS': _ftsController.text,
               'Title': _titleController.text,
             });
             setState(() {

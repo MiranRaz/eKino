@@ -1,7 +1,7 @@
 import 'package:ekino_mobile/models/reservation.dart';
 import 'package:ekino_mobile/providers/reservation_provider.dart';
-import 'package:ekino_mobile/screens/payment_home_screen.dart';
-import 'package:ekino_mobile/screens/reservations_my_list_screen.dart';
+import 'package:ekino_mobile/providers/transaction_provider.dart';
+import 'package:ekino_mobile/screens/cart_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:ekino_mobile/models/projection.dart';
 import 'package:ekino_mobile/models/user.dart';
@@ -26,8 +26,10 @@ class NewReservationScreen extends StatefulWidget {
 class _NewReservationScreenState extends State<NewReservationScreen> {
   final _formKey = GlobalKey<FormBuilderState>();
   late Map<String, dynamic> _initialValue;
-  late Map<String, dynamic> _saveValue;
+  late Map<String, dynamic> _saveReservationValue;
+  late Map<String, dynamic> _saveTransactionValue;
   late ReservationProvider _reservationProvider;
+  late TransactionProvider _transactionProvider;
   bool isLoading = true;
   late List<List<bool>> seats;
 
@@ -38,6 +40,7 @@ class _NewReservationScreenState extends State<NewReservationScreen> {
   void initState() {
     super.initState();
     _reservationProvider = context.read<ReservationProvider>();
+    _transactionProvider = context.read<TransactionProvider>();
 
     _initialValue = {
       "userId": widget.currentUser?.userId?.toString(),
@@ -85,9 +88,9 @@ class _NewReservationScreenState extends State<NewReservationScreen> {
                 size: Size(1200, 10),
                 painter: ScreenPainter(),
               ),
-              SizedBox(height: 48),
+              const SizedBox(height: 48),
               _buildSeatPicker(),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               ElevatedButton(
                 // Button to save reservation
                 onPressed: _saveReservation,
@@ -101,31 +104,30 @@ class _NewReservationScreenState extends State<NewReservationScreen> {
   }
 
   void _saveReservation() async {
-    try {
-      _saveValue = {
-        "userId": widget.currentUser.userId.toString(),
-        "projectionId": widget.projection.projectionId.toString(),
-        "row": _initialValue['row'],
-        "column": "x",
-        "numTicket": numTicket,
-      };
-      // await _reservationProvider.insert(_saveValue);
-      // ScaffoldMessenger.of(context).showSnackBar(
-      //   SnackBar(content: Text('Reservation saved successfully')),
-      // );
+    _saveReservationValue = {
+      "userId": widget.currentUser.userId.toString(),
+      "projectionId": widget.projection.projectionId.toString(),
+      "row": _initialValue['row'],
+      "column": "x",
+      "numTicket": numTicket,
+    };
 
-      // Navigate to PaymentScreen with _saveValue as props
-      Navigator.of(context).push(
-        MaterialPageRoute(
-          builder: (context) => PaymentHomeScreen(
-              reservationSaveValue: _saveValue, projection: widget.projection),
-        ),
-      );
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Failed to save reservation: $e')),
-      );
-    }
+    _saveTransactionValue = {
+      "dateOfTransaction": DateTime.now().toIso8601String(),
+      "reservationId": "",
+      "userId": widget.currentUser.userId.toString(),
+      "amount":
+          (widget.projection.ticketPrice! * double.parse(numTicket)).toString(),
+    };
+
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => CartScreen(
+            reservationSaveValue: _saveReservationValue,
+            transactionSaveValue: _saveTransactionValue,
+            projection: widget.projection),
+      ),
+    );
   }
 
   Widget _buildForm() {
@@ -139,22 +141,22 @@ class _NewReservationScreenState extends State<NewReservationScreen> {
             'User: ${widget.currentUser.username ?? ''}',
             style: TextStyle(fontSize: 16),
           ),
-          SizedBox(height: 10),
+          const SizedBox(height: 10),
           Text(
             'Projection: ${widget.projection.movie?.title ?? ''}',
             style: TextStyle(fontSize: 16),
           ),
-          SizedBox(height: 10),
+          const SizedBox(height: 10),
           Text(
             'Date of Projection: ${widget.projection.dateOfProjection != null ? DateFormat('dd.MM.yyyy HH:mm').format(widget.projection.dateOfProjection!) : 'Unknown'}',
             style: TextStyle(fontSize: 16),
           ),
-          SizedBox(height: 10),
+          const SizedBox(height: 10),
           Text(
             'Row: ${_initialValue['row']}',
-            style: TextStyle(fontSize: 16),
+            style: const TextStyle(fontSize: 16),
           ),
-          SizedBox(height: 10),
+          const SizedBox(height: 10),
           Text(
             'Number of Tickets: $numTicket',
             style: TextStyle(fontSize: 16),
@@ -174,16 +176,16 @@ class _NewReservationScreenState extends State<NewReservationScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Text(
+          const Text(
             'Select a Seat',
             style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
             textAlign: TextAlign.center,
           ),
-          SizedBox(height: 10),
+          const SizedBox(height: 10),
           GridView.builder(
             shrinkWrap: true,
-            physics: NeverScrollableScrollPhysics(),
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            physics: const NeverScrollableScrollPhysics(),
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 8,
               mainAxisSpacing: 8.0,
               crossAxisSpacing: 8,

@@ -48,7 +48,7 @@ abstract class BaseProvider<T> with ChangeNotifier {
     }
   }
 
-  Future<SearchResult<T>> getReservationByUserId(int? id) async {
+  Future<SearchResult<T>> getByUserId(int? id) async {
     var url = "$_baseUrl$_endpoint?UserId=$id";
 
     var uri = Uri.parse(url);

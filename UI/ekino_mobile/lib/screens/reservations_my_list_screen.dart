@@ -54,8 +54,7 @@ class _ReservationsListScreenState extends State<ReservationsListScreen> {
 
       var data;
       if (currentUser?.userId != null) {
-        data = await _reservationsProvider
-            .getReservationByUserId(_currentUser?.userId);
+        data = await _reservationsProvider.getByUserId(_currentUser?.userId);
       } else {
         data = null;
       }
@@ -187,11 +186,14 @@ class _ReservationsListScreenState extends State<ReservationsListScreen> {
       final projection = await projectionProvider.getById(projectionId);
 
       if (projection != null && projection.movieId != null) {
+        final movieId = projection.movieId!;
         final movieProvider =
             Provider.of<MoviesProvider>(context, listen: false);
-        final movie = await movieProvider.getById(projection.movieId!);
+        final movie = await movieProvider.getById(movieId);
         return movie?.title ?? 'Unknown';
       } else {
+        print(
+            'Projection or movieId not found for projection ID: $projectionId');
         return 'Unknown';
       }
     } catch (e) {

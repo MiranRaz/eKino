@@ -15,6 +15,8 @@ namespace eKino.Model.Requests
         public string Row { get; set; }
         [Required]
         public string Column { get; set; }
+        //[Required]
+        //public string Seat { get; set; }
         [Required]
         public string NumTicket { get; set; }
     }

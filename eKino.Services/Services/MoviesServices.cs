@@ -61,7 +61,7 @@ namespace eKino.Services.Services
                     mlContext = new MLContext();
 
                     // Load data from the database
-                    var tmpData = _context.Genres.Include("MovieGenres").ToList();
+                    var tmpData = _context.Genres.Include(x =>x.MovieGenres).ToList();
 
                     // Create data for training
                     var data = new List<MovieEntry>();

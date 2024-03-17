@@ -192,6 +192,7 @@ namespace eKino.Services.Database
                 entity.Property(e => e.ProjectionId).HasColumnName("ProjectionID");
 
                 entity.Property(e => e.Row).HasMaxLength(50);
+                //entity.Property(e => e.Seat).HasMaxLength(50);
 
                 entity.Property(e => e.UserId).HasColumnName("UserID");
 

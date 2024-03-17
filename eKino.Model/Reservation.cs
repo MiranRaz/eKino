@@ -14,6 +14,7 @@ namespace eKino.Model
         public DateTime DateOfReservation { get; set; }
         public string Row { get; set; }
         public string Column { get; set; }
+        //public string Seat { get; set; }
         public string NumTicket { get; set; }
     }
 }

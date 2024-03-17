@@ -1,14 +1,23 @@
 import 'dart:convert';
 import 'package:ekino_mobile/.env';
+import 'package:ekino_mobile/providers/reservation_provider.dart';
+import 'package:ekino_mobile/providers/transaction_provider.dart';
+import 'package:ekino_mobile/screens/reservations_my_list_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
+import 'package:provider/provider.dart';
 
 class PaymentScreen {
   Map<String, dynamic>? paymentIntent;
 
-  Future<void> stripeMakePayment(String amount, String currency) async {
+  Future<void> stripeMakePayment(
+      String amount,
+      String currency,
+      Map<String, dynamic>? reservationSaveValue,
+      Map<String, dynamic>? transactionSaveValue,
+      BuildContext context) async {
     try {
       paymentIntent = await createPaymentIntent(amount, currency);
       await Stripe.instance
@@ -28,29 +37,49 @@ class PaymentScreen {
                   paymentIntentClientSecret: paymentIntent![
                       'client_secret'], //Gotten from payment intent
                   style: ThemeMode.dark,
-                  merchantDisplayName: 'Ikay'))
+                  merchantDisplayName: 'eCinema'))
           .then((value) {});
 
-      //STEP 3: Display Payment sheet
-      displayPaymentSheet();
+      displayPaymentSheet(reservationSaveValue, transactionSaveValue, context);
     } catch (e) {
       print(e.toString());
       Fluttertoast.showToast(msg: e.toString());
     }
   }
 
-  displayPaymentSheet() async {
+  Future<void> displayPaymentSheet(
+    Map<String, dynamic>? reservationSaveValue,
+    Map<String, dynamic>? transactionSaveValue,
+    BuildContext context,
+  ) async {
     try {
-      // 3. display the payment sheet.
+      final _reservationProvider =
+          Provider.of<ReservationProvider>(context, listen: false);
+      final _transactionProvider =
+          Provider.of<TransactionProvider>(context, listen: false);
+      final reservation =
+          await _reservationProvider.insert(reservationSaveValue);
+      transactionSaveValue?['reservationId'] =
+          reservation.reservationId.toString();
+
+      // Display the payment sheet.
       await Stripe.instance.presentPaymentSheet();
 
-      Fluttertoast.showToast(msg: 'Payment succesfully completed');
+      Fluttertoast.showToast(msg: 'Payment successfully completed');
+
+      await _transactionProvider.insert(transactionSaveValue);
+
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => const ReservationsListScreen()),
+      );
     } on Exception catch (e) {
+      // Handle exceptions
       if (e is StripeException) {
         Fluttertoast.showToast(
             msg: 'Error from Stripe: ${e.error.localizedMessage}');
       } else {
-        Fluttertoast.showToast(msg: 'Unforeseen error: ${e}');
+        Fluttertoast.showToast(msg: 'Unforeseen error: $e');
       }
     }
   }
