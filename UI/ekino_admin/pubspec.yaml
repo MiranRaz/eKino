@@ -39,11 +39,11 @@ dependencies:
   json_annotation: ^4.8.1
   json_serializable: ^6.7.1
   flutter_form_builder: ^9.2.1
-  file_picker: ^6.1.1
+  file_picker: ^8.1.2
   shared_preferences: ^2.2.2
-  win32: ^5.0.9
+  win32: ^5.2.0
   collection: ^1.17.0
-    
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -53,7 +53,7 @@ dev_dependencies:
   # activated in the `analysis_options.yaml` file located at the root of your
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
-  flutter_lints: ^2.0.0
+  flutter_lints: ^5.0.0
   build_runner: ^2.4.8
   intl: ^0.19.0
 # For information on the generic Dart part of this file, see the
