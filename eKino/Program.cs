@@ -19,7 +19,6 @@ var builder = WebApplication.CreateBuilder(args);
 //builder.Services.AddTransient<IDirectorService, DirectorService>();
 
 builder.Services.AddTransient<IUserService, UserService>();
-builder.Services.AddTransient<IRoleService, RoleService>();
 builder.Services.AddTransient<IAuditoriumService, AuditoriumService>();
 builder.Services.AddTransient<IDirectorService, DirectorService>();
 builder.Services.AddTransient<IGenreService, GenreService>();
@@ -107,5 +106,12 @@ using (var scope = app.Services.CreateScope())
 
     dataContext.Database.Migrate();
 }
-
+var endpoints = app.Services.GetRequiredService<IEnumerable<EndpointDataSource>>();
+foreach (var endpoint in endpoints.SelectMany(es => es.Endpoints))
+{
+    if (endpoint is RouteEndpoint routeEndpoint)
+    {
+        Console.WriteLine($"Route: {routeEndpoint.RoutePattern.RawText}, HTTP Method: {string.Join(", ", routeEndpoint.Metadata.OfType<HttpMethodMetadata>().FirstOrDefault()?.HttpMethods ?? Array.Empty<string>())}");
+    }
+}
 app.Run();

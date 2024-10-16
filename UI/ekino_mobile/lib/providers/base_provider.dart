@@ -238,10 +238,60 @@ abstract class BaseProvider<T> with ChangeNotifier {
     var response = await http.get(uri, headers: headers);
     if (isValidResponse(response)) {
       var userData = jsonDecode(response.body);
-      return Users.fromJson(
-          userData); // Assuming you have a fromJson method in your User class
+      return Users.fromJson(userData);
     } else {
       throw Exception("Unknown error, please try again!");
     }
   }
+
+  Future<void> register(Map<String, dynamic> user, BuildContext context) async {
+    final baseUrl = _baseUrl!.endsWith('/')
+        ? _baseUrl!.substring(0, _baseUrl!.length - 1)
+        : _baseUrl;
+
+    final response = await http.post(
+      Uri.parse('$baseUrl/Users'),
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Basic ${base64Encode(utf8.encode('admin:admin'))}',
+      },
+      body: json.encode(user),
+    );
+
+    if (response.statusCode == 200) {
+      showModal(context, "Success", "User registered successfully!");
+      Navigator.of(context).pop();
+    } else {
+      String errorMessage;
+      try {
+        if (response.body.isNotEmpty) {
+          errorMessage =
+              json.decode(response.body)['message'] ?? 'Unknown error occurred';
+        } else {
+          errorMessage = 'No response from server';
+        }
+      } catch (e) {
+        errorMessage = 'Failed to parse error message: ${e.toString()}';
+      }
+      showModal(context, "Error", 'Failed to register user: $errorMessage');
+    }
+  }
+}
+
+void showModal(BuildContext context, String title, String message) {
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: Text(title),
+        content: Text(message),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: const Text("Close"),
+          ),
+        ],
+      );
+    },
+  );
 }

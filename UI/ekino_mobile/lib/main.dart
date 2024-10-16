@@ -125,11 +125,126 @@ class LoginPage extends StatelessWidget {
                                   ]));
                     }
                   },
-                  child: const Text("Login"))
+                  child: const Text("Login")),
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => RegistrationPage()));
+                },
+                child: const Text("Register"),
+              )
             ]),
           ),
         ),
       )),
+    );
+  }
+}
+
+class RegistrationPage extends StatelessWidget {
+  RegistrationPage({Key? key}) : super(key: key);
+
+  final TextEditingController _firstNameController = TextEditingController();
+  final TextEditingController _lastNameController = TextEditingController();
+  final TextEditingController _usernameController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _phoneController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _passwordConfirmationController =
+      TextEditingController();
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text("Register")),
+      body: Center(
+        child: Container(
+          constraints: const BoxConstraints(maxWidth: 400, maxHeight: 600),
+          child: FlutterMaterial.Card(
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(children: [
+                TextField(
+                  decoration: const InputDecoration(labelText: "First Name"),
+                  controller: _firstNameController,
+                ),
+                const SizedBox(height: 16),
+                TextField(
+                  decoration: const InputDecoration(labelText: "Last Name"),
+                  controller: _lastNameController,
+                ),
+                const SizedBox(height: 16),
+                TextField(
+                  decoration: const InputDecoration(labelText: "Username"),
+                  controller: _usernameController,
+                ),
+                const SizedBox(height: 16),
+                TextField(
+                  decoration: const InputDecoration(labelText: "Email"),
+                  controller: _emailController,
+                ),
+                const SizedBox(height: 16),
+                TextField(
+                  decoration: const InputDecoration(labelText: "Phone"),
+                  controller: _phoneController,
+                ),
+                const SizedBox(height: 16),
+                TextField(
+                  obscureText: true,
+                  decoration: const InputDecoration(labelText: "Password"),
+                  controller: _passwordController,
+                ),
+                const SizedBox(height: 16),
+                TextField(
+                  obscureText: true,
+                  decoration:
+                      const InputDecoration(labelText: "Confirm Password"),
+                  controller: _passwordConfirmationController,
+                ),
+                const SizedBox(height: 24),
+                ElevatedButton(
+                  onPressed: () async {
+                    var user = {
+                      "firstName": _firstNameController.text,
+                      "lastName": _lastNameController.text,
+                      "username": _usernameController.text,
+                      "status": true,
+                      "email": _emailController.text,
+                      "phone": _phoneController.text,
+                      "password": _passwordController.text,
+                      "passwordConfirmation":
+                          _passwordConfirmationController.text,
+                      "roleIdList": [2]
+                    };
+
+                    try {
+                      await context
+                          .read<UsersProvider>()
+                          .register(user, context);
+                      Navigator.of(context).pop();
+                    } catch (error) {
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) => AlertDialog(
+                          title: const Text("Error"),
+                          content: Text(error.toString()),
+                          actions: [
+                            TextButton(
+                              onPressed: () => Navigator.pop(context),
+                              child: const Text("Close"),
+                            ),
+                          ],
+                        ),
+                      );
+                    }
+                  },
+                  child: const Text("Register"),
+                ),
+              ]),
+            ),
+          ),
+        ),
+      ),
     );
   }
 }
