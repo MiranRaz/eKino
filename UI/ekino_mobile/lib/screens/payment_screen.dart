@@ -53,12 +53,12 @@ class PaymentScreen {
     BuildContext context,
   ) async {
     try {
-      final _reservationProvider =
+      final reservationProvider =
           Provider.of<ReservationProvider>(context, listen: false);
-      final _transactionProvider =
+      final transactionProvider =
           Provider.of<TransactionProvider>(context, listen: false);
       final reservation =
-          await _reservationProvider.insert(reservationSaveValue);
+          await reservationProvider.insert(reservationSaveValue);
       transactionSaveValue?['reservationId'] =
           reservation.reservationId.toString();
 
@@ -67,7 +67,7 @@ class PaymentScreen {
 
       Fluttertoast.showToast(msg: 'Payment successfully completed');
 
-      await _transactionProvider.insert(transactionSaveValue);
+      await transactionProvider.insert(transactionSaveValue);
 
       Navigator.pushReplacement(
         context,

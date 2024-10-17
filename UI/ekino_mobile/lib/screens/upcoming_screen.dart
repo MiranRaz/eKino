@@ -10,7 +10,7 @@ import 'package:ekino_mobile/models/search_result.dart';
 import 'package:ekino_mobile/widgets/master_screen.dart';
 
 class UpcomingScreen extends StatefulWidget {
-  const UpcomingScreen({Key? key}) : super(key: key);
+  const UpcomingScreen({super.key});
 
   @override
   _UpcomingScreenState createState() => _UpcomingScreenState();
@@ -20,7 +20,7 @@ class _UpcomingScreenState extends State<UpcomingScreen> {
   late ProjectionsProvider _projectionsProvider;
   SearchResult<Projection>? resultP;
 
-  TextEditingController _ftsController = TextEditingController();
+  final TextEditingController _ftsController = TextEditingController();
 
   @override
   void initState() {
@@ -98,7 +98,7 @@ class _UpcomingScreenState extends State<UpcomingScreen> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             const SizedBox(height: 48),
-            Container(
+            SizedBox(
               width: double.infinity,
               height: 300,
               child: imageFromBase64String(movie?.photo ?? ""),
@@ -116,7 +116,7 @@ class _UpcomingScreenState extends State<UpcomingScreen> {
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Text(
-                DateFormat('yyyy-MM-dd HH:mm')
+                DateFormat('dd.MM.yyyy HH:mm')
                     .format(projection.dateOfProjection),
                 textAlign: TextAlign.center,
                 style: const TextStyle(

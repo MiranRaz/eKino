@@ -26,7 +26,7 @@ void main() {
 }
 
 class MyMaterialApp extends StatelessWidget {
-  const MyMaterialApp({Key? key}) : super(key: key);
+  const MyMaterialApp({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -44,10 +44,10 @@ class MyMaterialApp extends StatelessWidget {
 }
 
 class LoginPage extends StatelessWidget {
-  LoginPage({Key? key}) : super(key: key);
+  LoginPage({super.key});
 
-  TextEditingController _usernameController = new TextEditingController();
-  TextEditingController _passwordController = new TextEditingController();
+  final TextEditingController _usernameController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
   late MoviesProvider _moviesProvider;
 
   @override

@@ -8,7 +8,7 @@ import 'package:ekino_admin/widgets/master_screen.dart';
 import 'package:provider/provider.dart';
 
 class UsersListScreen extends StatefulWidget {
-  const UsersListScreen({Key? key}) : super(key: key);
+  const UsersListScreen({super.key});
 
   @override
   State<UsersListScreen> createState() => _UsersListScreenState();
@@ -19,7 +19,7 @@ class _UsersListScreenState extends State<UsersListScreen> {
   SearchResult<Users>? result;
   late Timer _debounce;
 
-  TextEditingController _ftsController = TextEditingController();
+  final TextEditingController _ftsController = TextEditingController();
 
   @override
   void initState() {
@@ -145,7 +145,7 @@ class _UsersListScreenState extends State<UsersListScreen> {
             ),
           ],
           rows: result?.result
-                  ?.map((user) => DataRow(
+                  .map((user) => DataRow(
                         onSelectChanged: (_) {
                           Navigator.of(context).push(MaterialPageRoute(
                             builder: (context) => UserDetailsScreen(

@@ -14,8 +14,8 @@ class MasterScreenWidget extends StatefulWidget {
     this.child,
     this.title,
     this.title_widget,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   State<MasterScreenWidget> createState() => _MasterScreenWidgetState();

@@ -79,7 +79,7 @@ class MoviesDetailsScreenState extends State<MoviesDetailsScreen> {
                   // Add curly braces here
                   _formKey.currentState?.saveAndValidate();
 
-                  var request = new Map.from(_formKey.currentState!.value);
+                  var request = Map.from(_formKey.currentState!.value);
 
                   request["photo"] = _base64Image;
                   print("rq slika -> ${request["photo"]}");

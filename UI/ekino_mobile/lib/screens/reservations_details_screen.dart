@@ -12,8 +12,7 @@ import 'package:intl/intl.dart';
 class ReservationDetailsScreen extends StatefulWidget {
   final Reservation? reservation;
 
-  const ReservationDetailsScreen({Key? key, this.reservation})
-      : super(key: key);
+  const ReservationDetailsScreen({super.key, this.reservation});
 
   @override
   State<ReservationDetailsScreen> createState() =>
@@ -142,13 +141,13 @@ class _ReservationDetailsScreenState extends State<ReservationDetailsScreen> {
                         ?.firstWhere((projection) =>
                             projection.projectionId.toString() ==
                             _initialValue['projectionId'])
-                        ?.dateOfProjection !=
+                        .dateOfProjection !=
                     null
                 ? DateFormat('dd.MM.yyyy HH:mm').format(_projectionsList!
                     .firstWhere((projection) =>
                         projection.projectionId.toString() ==
                         _initialValue['projectionId'])
-                    .dateOfProjection!)
+                    .dateOfProjection)
                 : 'Unknown',
             enabled: false,
           ),
@@ -199,7 +198,7 @@ class _ReservationDetailsScreenState extends State<ReservationDetailsScreen> {
               final seatRow = String.fromCharCode(65 + row);
               final seatColumn = column + 1;
 
-              final seatValue = '${seatRow}${seatColumn}';
+              final seatValue = '$seatRow$seatColumn';
               final isReserved = allReservations?.any((reservation) =>
                       reservation.row!.contains(seatValue) &&
                       reservation.projectionId ==

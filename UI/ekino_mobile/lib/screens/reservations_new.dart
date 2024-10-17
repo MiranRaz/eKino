@@ -14,10 +14,10 @@ class NewReservationScreen extends StatefulWidget {
   final Projection projection;
 
   const NewReservationScreen({
-    Key? key,
+    super.key,
     required this.currentUser,
     required this.projection,
-  }) : super(key: key);
+  });
 
   @override
   _NewReservationScreenState createState() => _NewReservationScreenState();
@@ -43,8 +43,8 @@ class _NewReservationScreenState extends State<NewReservationScreen> {
     _transactionProvider = context.read<TransactionProvider>();
 
     _initialValue = {
-      "userId": widget.currentUser?.userId?.toString(),
-      "projectionId": widget.projection?.projectionId.toString(),
+      "userId": widget.currentUser.userId?.toString(),
+      "projectionId": widget.projection.projectionId.toString(),
       "row": '',
       "numTicket": numTicket,
     };
@@ -148,7 +148,7 @@ class _NewReservationScreenState extends State<NewReservationScreen> {
           ),
           const SizedBox(height: 10),
           Text(
-            'Date of Projection: ${widget.projection.dateOfProjection != null ? DateFormat('dd.MM.yyyy HH:mm').format(widget.projection.dateOfProjection!) : 'Unknown'}',
+            'Date of Projection: ${widget.projection.dateOfProjection != null ? DateFormat('dd.MM.yyyy HH:mm').format(widget.projection.dateOfProjection) : 'Unknown'}',
             style: TextStyle(fontSize: 16),
           ),
           const SizedBox(height: 10),
@@ -198,7 +198,7 @@ class _NewReservationScreenState extends State<NewReservationScreen> {
               final seatRow = String.fromCharCode(65 + row);
               final seatColumn = column + 1;
 
-              final seatValue = '${seatRow}${seatColumn}';
+              final seatValue = '$seatRow$seatColumn';
               final isReserved = allReservations?.any((reservation) =>
                       reservation.row!.contains(seatValue) &&
                       reservation.projectionId ==

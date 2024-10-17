@@ -12,7 +12,7 @@ import 'package:intl/intl.dart';
 class ProjectionDetailsScreen extends StatefulWidget {
   final Projection? projection;
 
-  const ProjectionDetailsScreen({Key? key, this.projection}) : super(key: key);
+  const ProjectionDetailsScreen({super.key, this.projection});
 
   @override
   State<ProjectionDetailsScreen> createState() =>

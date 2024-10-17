@@ -38,7 +38,7 @@ class Projection {
       'dateOfProjection': dateOfProjection,
       'auditoriumId': auditoriumId,
       'movieId': movieId,
-      'movie': movie != null ? movie!.toJson() : null,
+      'movie': movie?.toJson(),
       'ticketPrice': ticketPrice,
     };
   }

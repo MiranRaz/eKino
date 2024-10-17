@@ -10,8 +10,7 @@ import 'package:ekino_mobile/providers/users_provider.dart';
 class ChangePasswordScreen extends StatefulWidget {
   final Map<String, dynamic> userData;
 
-  const ChangePasswordScreen({Key? key, required this.userData})
-      : super(key: key);
+  const ChangePasswordScreen({super.key, required this.userData});
 
   @override
   _ChangePasswordScreenState createState() => _ChangePasswordScreenState();

@@ -12,7 +12,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 class UserDetailsScreen extends StatefulWidget {
   final Users? user;
 
-  const UserDetailsScreen({Key? key, this.user}) : super(key: key);
+  const UserDetailsScreen({super.key, this.user});
 
   @override
   State<UserDetailsScreen> createState() => _UserDetailsScreenState();
@@ -21,7 +21,7 @@ class UserDetailsScreen extends StatefulWidget {
 class _UserDetailsScreenState extends State<UserDetailsScreen> {
   final _formKey = GlobalKey<FormBuilderState>();
   late UsersProvider _usersProvider;
-  late RoleProvider _roleProvider = RoleProvider();
+  late final RoleProvider _roleProvider = RoleProvider();
 
   SearchResult<Role>? _roleResult;
   bool _isLoading = true;
@@ -184,7 +184,7 @@ class _UserDetailsScreenState extends State<UserDetailsScreen> {
             decoration: InputDecoration(labelText: 'Role'),
             initialValue: _selectedRoleId,
             items: _roleResult?.result
-                    ?.map((role) => DropdownMenuItem(
+                    .map((role) => DropdownMenuItem(
                           value: role.roleId!,
                           child: Text(role.name ?? ''),
                         ))
@@ -214,7 +214,7 @@ class _UserDetailsScreenState extends State<UserDetailsScreen> {
           Map<String, dynamic>.from(formData ?? {});
       // Ensure roleIdList is always in an array format
       if (updatedData['roleIdList'] != null &&
-          !(updatedData['roleIdList'] is List)) {
+          updatedData['roleIdList'] is! List) {
         updatedData['roleIdList'] = [updatedData['roleIdList']];
       }
       // Ensure string fields are properly formatted

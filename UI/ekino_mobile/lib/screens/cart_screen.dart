@@ -10,12 +10,11 @@ class CartScreen extends StatefulWidget {
   final Map<String, dynamic>? transactionSaveValue;
   final Projection projection;
 
-  CartScreen(
-      {Key? key,
+  const CartScreen(
+      {super.key,
       this.transactionSaveValue,
       this.reservationSaveValue,
-      required this.projection})
-      : super(key: key);
+      required this.projection});
 
   @override
   _CartScreenState createState() => _CartScreenState();

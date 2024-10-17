@@ -12,8 +12,7 @@ import 'package:intl/intl.dart';
 class ReservationDetailsScreen extends StatefulWidget {
   final Reservation? reservation;
 
-  const ReservationDetailsScreen({Key? key, this.reservation})
-      : super(key: key);
+  const ReservationDetailsScreen({super.key, this.reservation});
 
   @override
   State<ReservationDetailsScreen> createState() =>
@@ -136,13 +135,13 @@ class _ReservationDetailsScreenState extends State<ReservationDetailsScreen> {
                         ?.firstWhere((projection) =>
                             projection.projectionId.toString() ==
                             _initialValue['projectionId'])
-                        ?.dateOfProjection !=
+                        .dateOfProjection !=
                     null
                 ? DateFormat('dd.MM.yyyy HH:mm').format(_projectionsList!
                     .firstWhere((projection) =>
                         projection.projectionId.toString() ==
                         _initialValue['projectionId'])
-                    .dateOfProjection!)
+                    .dateOfProjection)
                 : 'Unknown',
             enabled: false,
           ),
@@ -198,7 +197,7 @@ class _ReservationDetailsScreenState extends State<ReservationDetailsScreen> {
               final seatColumn = column + 1;
 
               final isReserved = allReservations?.any((reservation) =>
-                      reservation.row!.contains('${seatRow}${seatColumn}') &&
+                      reservation.row!.contains('$seatRow$seatColumn') &&
                       reservation.projectionId ==
                           int.parse(_initialValue['projectionId'])) ??
                   false;
@@ -206,13 +205,13 @@ class _ReservationDetailsScreenState extends State<ReservationDetailsScreen> {
               final currentUserReservation = widget.reservation;
               final currentUserReserved = currentUserReservation != null &&
                   currentUserReservation.row
-                          ?.contains('${seatRow}${seatColumn}') ==
+                          ?.contains('$seatRow$seatColumn') ==
                       true;
 
               return GestureDetector(
                 onTap: () {
                   setState(() {
-                    final seatValue = '${seatRow}${seatColumn}';
+                    final seatValue = '$seatRow$seatColumn';
                     final List<String> rowValues = _initialValue['row']
                         .split(',')
                         .toList(); // Convert to list

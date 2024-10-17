@@ -17,8 +17,8 @@ class _MoviesListScreenState extends State<MoviesListScreen> {
   late MoviesProvider _moviesProvider;
   SearchResult<Movies>? result;
 
-  TextEditingController _ftsController = new TextEditingController();
-  TextEditingController _titleController = new TextEditingController();
+  final TextEditingController _ftsController = TextEditingController();
+  final TextEditingController _titleController = TextEditingController();
 
   @override
   void didChangeDependencies() {

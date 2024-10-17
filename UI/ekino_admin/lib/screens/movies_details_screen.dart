@@ -16,7 +16,7 @@ import 'package:provider/provider.dart';
 class MoviesDetailsScreen extends StatefulWidget {
   final Movies? movies;
 
-  const MoviesDetailsScreen({Key? key, this.movies}) : super(key: key);
+  const MoviesDetailsScreen({super.key, this.movies});
 
   @override
   State<MoviesDetailsScreen> createState() => _MoviesDetailsScreenState();
@@ -216,13 +216,13 @@ class _MoviesDetailsScreenState extends State<MoviesDetailsScreen> {
     final String? base64Image =
         _formKey.currentState?.value['photo'] as String?;
     if (base64Image != null) {
-      return Container(
+      return SizedBox(
         width: double.infinity,
         height: 400,
         child: Image.memory(base64Decode(base64Image)),
       );
     } else if (widget.movies?.photo != null) {
-      return Container(
+      return SizedBox(
         width: double.infinity,
         height: 400,
         child: Image.memory(base64Decode(widget.movies!.photo!)),

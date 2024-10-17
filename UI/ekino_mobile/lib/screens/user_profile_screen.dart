@@ -10,7 +10,7 @@ import 'package:ekino_mobile/providers/role_provider.dart';
 import 'package:ekino_mobile/providers/users_provider.dart';
 
 class UserProfileScreen extends StatefulWidget {
-  const UserProfileScreen({Key? key}) : super(key: key);
+  const UserProfileScreen({super.key});
 
   @override
   State<UserProfileScreen> createState() => _UserProfileScreenState();
@@ -19,7 +19,7 @@ class UserProfileScreen extends StatefulWidget {
 class _UserProfileScreenState extends State<UserProfileScreen> {
   final _formKey = GlobalKey<FormBuilderState>();
   late UsersProvider _usersProvider;
-  late RoleProvider _roleProvider = RoleProvider();
+  late final RoleProvider _roleProvider = RoleProvider();
 
   SearchResult<Role>? _roleResult;
   bool _isLoading = true;
@@ -50,7 +50,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
     if (username != null && _isLoading) {
       try {
         final user = await _usersProvider.get(filter: {"Username": username});
-        if (user != null && user.result.isNotEmpty) {
+        if (user.result.isNotEmpty) {
           setState(() {
             _user = user.result[0];
             userData = {

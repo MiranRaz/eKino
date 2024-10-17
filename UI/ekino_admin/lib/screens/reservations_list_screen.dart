@@ -10,7 +10,7 @@ import 'package:ekino_admin/widgets/master_screen.dart';
 import 'package:intl/intl.dart';
 
 class ReservationsListScreen extends StatefulWidget {
-  const ReservationsListScreen({Key? key}) : super(key: key);
+  const ReservationsListScreen({super.key});
 
   @override
   State<ReservationsListScreen> createState() => _ReservationsListScreenState();

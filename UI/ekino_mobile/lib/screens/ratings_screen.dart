@@ -6,8 +6,7 @@ class RatingsScreen extends StatefulWidget {
   final int userId;
   final int movieId;
 
-  const RatingsScreen({Key? key, required this.userId, required this.movieId})
-      : super(key: key);
+  const RatingsScreen({super.key, required this.userId, required this.movieId});
 
   @override
   _RatingsScreenState createState() => _RatingsScreenState();

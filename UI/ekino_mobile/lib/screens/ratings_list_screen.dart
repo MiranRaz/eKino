@@ -1,6 +1,7 @@
 import 'package:ekino_mobile/models/movies.dart';
 import 'package:ekino_mobile/models/projection.dart';
 import 'package:ekino_mobile/models/rating.dart';
+import 'package:ekino_mobile/models/search_result.dart';
 import 'package:ekino_mobile/models/user.dart';
 import 'package:ekino_mobile/providers/rating_provider.dart';
 import 'package:ekino_mobile/screens/ratings_screen.dart';
@@ -17,7 +18,7 @@ import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class RatingsListScreen extends StatefulWidget {
-  const RatingsListScreen({Key? key}) : super(key: key);
+  const RatingsListScreen({super.key});
 
   @override
   State<RatingsListScreen> createState() => _RatingsListScreenState();
@@ -57,7 +58,7 @@ class _RatingsListScreenState extends State<RatingsListScreen> {
       _reservationProvider =
           Provider.of<ReservationProvider>(context, listen: false);
 
-      var data;
+      SearchResult<Reservation>? data;
       if (currentUser.userId != null) {
         data = await _reservationProvider.getByUserId(currentUser.userId);
       } else {

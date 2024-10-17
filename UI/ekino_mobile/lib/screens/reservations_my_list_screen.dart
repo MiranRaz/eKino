@@ -1,4 +1,5 @@
 import 'package:ekino_mobile/models/user.dart';
+import 'package:ekino_mobile/screens/ratings_list_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:ekino_mobile/models/reservation.dart';
@@ -99,10 +100,24 @@ class _ReservationsListScreenState extends State<ReservationsListScreen> {
         itemCount: _reservations!.length,
         itemBuilder: (context, index) {
           final reservation = _reservations![index];
+          // Check if the projection date has passed
+          _checkProjectionDate(reservation.projectionId!);
           return Card(
             margin: EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
             child: ListTile(
-              onTap: () {
+              onTap: () async {
+                // Check if the projection date has passed when the reservation is tapped
+                final projectionDate = await _fetchProjectionDate(
+                    context, reservation.projectionId!);
+                if (projectionDate != 'Unknown') {
+                  DateTime dateTime =
+                      DateFormat('dd.MM.yyyy HH:mm').parse(projectionDate);
+                  if (dateTime.isBefore(DateTime.now())) {
+                    _showProjectionPassedModal();
+                    return; // Exit if the projection date has passed
+                  }
+                }
+                // Navigate to the reservation details screen if the date has not passed
                 Navigator.of(context).push(MaterialPageRoute(
                   builder: (context) => ReservationDetailsScreen(
                     reservation: reservation,
@@ -113,7 +128,7 @@ class _ReservationsListScreenState extends State<ReservationsListScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'ID: ${reservation.reservationId}',
+                    'Reservation Number: ${reservation.reservationId}',
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                   SizedBox(height: 4.0),
@@ -165,6 +180,47 @@ class _ReservationsListScreenState extends State<ReservationsListScreen> {
         },
       );
     }
+  }
+
+  void _checkProjectionDate(int projectionId) async {
+    final projectionDate = await _fetchProjectionDate(context, projectionId);
+    if (projectionDate != 'Unknown') {
+      DateTime dateTime = DateFormat('dd.MM.yyyy HH:mm').parse(projectionDate);
+      if (dateTime.isBefore(DateTime.now())) {
+        _showProjectionPassedModal();
+      }
+    }
+  }
+
+  void _showProjectionPassedModal() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Notification'),
+          content: Text(
+              'The date of some projections has passed. You can see the details of those projection in your ratings screen.'),
+          actions: [
+            TextButton(
+              child: Text('Open Ratings Screen'),
+              onPressed: () {
+                Navigator.of(context).pop();
+                // Navigate to ratings screen (replace with actual navigation)
+                Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => const RatingsListScreen(),
+                ));
+              },
+            ),
+            TextButton(
+              child: Text('Close'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 
   Future<String> _fetchUserName(BuildContext context, int userId) async {
