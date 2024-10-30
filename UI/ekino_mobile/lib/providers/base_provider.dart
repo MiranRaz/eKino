@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'package:ekino_mobile/models/reservation.dart';
 import 'package:ekino_mobile/models/search_result.dart';
 import 'package:ekino_mobile/models/user.dart';
 import 'package:ekino_mobile/utils/util.dart';

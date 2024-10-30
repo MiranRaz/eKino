@@ -53,21 +53,15 @@ class _RatingsScreenState extends State<RatingsScreen> {
   Widget build(BuildContext context) {
     print("existingRating -> $existingRating-");
     return AlertDialog(
-      title: Text('Enter Rating'),
+      title: Text('Thank You!'),
       content: SingleChildScrollView(
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            TextFormField(
-              controller: TextEditingController(text: widget.userId.toString()),
-              enabled: false,
-              decoration: InputDecoration(labelText: 'User ID'),
-            ),
-            TextFormField(
-              controller:
-                  TextEditingController(text: widget.movieId.toString()),
-              enabled: false,
-              decoration: InputDecoration(labelText: 'Movie ID'),
+            Text(
+              'We hope you liked the movie! We would appreciate it if you could leave a review.',
+              style: TextStyle(fontSize: 16.0),
+              textAlign: TextAlign.center,
             ),
             TextFormField(
               controller: _valueController,
@@ -86,9 +80,13 @@ class _RatingsScreenState extends State<RatingsScreen> {
         ),
         ElevatedButton(
           onPressed: () {
-            final int value = int.tryParse(_valueController.text) ?? 0;
-            _saveRating(widget.userId, widget.movieId, value);
-            Navigator.of(context).pop();
+            if (_valueController.text.isNotEmpty) {
+              final int value = int.tryParse(_valueController.text) ?? 0;
+              _saveRating(widget.userId, widget.movieId, value);
+              Navigator.of(context).pop();
+            } else {
+              _showSnackbar('Please enter a value before saving.', false);
+            }
           },
           child: Text('Save'),
         ),

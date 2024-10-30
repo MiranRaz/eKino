@@ -7,14 +7,14 @@ part of 'rating.dart';
 // **************************************************************************
 
 Rating _$RatingFromJson(Map<String, dynamic> json) => Rating(
-      json['ratingId'] as int?,
-      json['userId'] as int?,
+      (json['ratingId'] as num?)?.toInt(),
+      (json['userId'] as num?)?.toInt(),
       Users.fromJson(json['user'] as Map<String, dynamic>),
-      json['movieId'] as int?,
+      (json['movieId'] as num?)?.toInt(),
       json['movie'] == null
           ? null
           : Movies.fromJson(json['movie'] as Map<String, dynamic>),
-      json['value'] as int?,
+      (json['value'] as num?)?.toInt(),
       json['dateOfRating'] == null
           ? null
           : DateTime.parse(json['dateOfRating'] as String),

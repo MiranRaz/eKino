@@ -7,14 +7,14 @@ import 'package:ekino_admin/providers/users_provider.dart';
 import 'package:ekino_admin/widgets/master_screen.dart';
 import 'package:provider/provider.dart';
 
-class UsersListScreen extends StatefulWidget {
-  const UsersListScreen({super.key});
+class EmployeeListScreen extends StatefulWidget {
+  const EmployeeListScreen({super.key});
 
   @override
-  State<UsersListScreen> createState() => _UsersListScreenState();
+  State<EmployeeListScreen> createState() => _EmployeeListScreenState();
 }
 
-class _UsersListScreenState extends State<UsersListScreen> {
+class _EmployeeListScreenState extends State<EmployeeListScreen> {
   late UsersProvider _usersProvider;
   SearchResult<Users>? result;
   late Timer _debounce;
@@ -145,7 +145,7 @@ class _UsersListScreenState extends State<UsersListScreen> {
             ),
           ],
           rows: result?.result
-                  .where((user) => user.roleNames?.contains('Client') ?? false) // Filter for client role
+                  .where((user) => user.roleNames?.contains('Administrator') ?? false) // Filter for admin role
                   .map((user) => DataRow(
                         onSelectChanged: (_) {
                           Navigator.of(context).push(MaterialPageRoute(

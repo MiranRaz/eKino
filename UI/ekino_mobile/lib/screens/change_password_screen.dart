@@ -1,8 +1,4 @@
 import 'package:ekino_mobile/main.dart';
-import 'package:ekino_mobile/screens/ratings_list_screen.dart';
-import 'package:ekino_mobile/screens/reservations_my_list_screen.dart';
-import 'package:ekino_mobile/screens/upcoming_screen.dart';
-import 'package:ekino_mobile/screens/user_profile_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:ekino_mobile/providers/users_provider.dart';

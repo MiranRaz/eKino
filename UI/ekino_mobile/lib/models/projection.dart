@@ -42,4 +42,8 @@ class Projection {
       'ticketPrice': ticketPrice,
     };
   }
+  @override
+  String toString() {
+    return 'Projection(projectionId: $projectionId, movieId: $movieId, dateOfProjection: $dateOfProjection)';
+  }
 }

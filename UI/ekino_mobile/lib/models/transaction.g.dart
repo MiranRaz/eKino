@@ -7,9 +7,9 @@ part of 'transaction.dart';
 // **************************************************************************
 
 Transaction _$TransactionFromJson(Map<String, dynamic> json) => Transaction(
-      json['transactionId'] as int?,
-      json['userId'] as int?,
-      json['reservationId'] as int?,
+      (json['transactionId'] as num?)?.toInt(),
+      (json['userId'] as num?)?.toInt(),
+      (json['reservationId'] as num?)?.toInt(),
       json['date'] == null ? null : DateTime.parse(json['date'] as String),
       (json['number'] as num?)?.toDouble(),
     );

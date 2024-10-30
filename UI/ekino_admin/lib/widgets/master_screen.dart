@@ -1,4 +1,5 @@
 import 'package:ekino_admin/main.dart';
+import 'package:ekino_admin/screens/employee_list_screen.dart';
 import 'package:ekino_admin/screens/reservations_list_screen.dart';
 import 'package:ekino_admin/screens/upcoming_details_screen.dart';
 import 'package:ekino_admin/screens/users_details_screen.dart';
@@ -66,6 +67,14 @@ class _MasterScreenWidgetState extends State<MasterScreenWidget> {
               onTap: () {
                 Navigator.of(context).push(MaterialPageRoute(
                   builder: (context) => const UsersListScreen(),
+                ));
+              },
+            ),
+            ListTile(
+              title: const Text("Employee list"),
+              onTap: () {
+                Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => const EmployeeListScreen(),
                 ));
               },
             ),

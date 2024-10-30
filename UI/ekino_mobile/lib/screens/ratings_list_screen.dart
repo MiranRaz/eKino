@@ -1,9 +1,4 @@
-import 'package:ekino_mobile/models/movies.dart';
-import 'package:ekino_mobile/models/projection.dart';
-import 'package:ekino_mobile/models/rating.dart';
 import 'package:ekino_mobile/models/search_result.dart';
-import 'package:ekino_mobile/models/user.dart';
-import 'package:ekino_mobile/providers/rating_provider.dart';
 import 'package:ekino_mobile/screens/ratings_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -12,7 +7,6 @@ import 'package:ekino_mobile/providers/movies_provider.dart';
 import 'package:ekino_mobile/providers/projections_provider.dart';
 import 'package:ekino_mobile/providers/reservation_provider.dart';
 import 'package:ekino_mobile/providers/users_provider.dart';
-import 'package:ekino_mobile/screens/reservations_details_screen.dart';
 import 'package:ekino_mobile/widgets/master_screen.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -25,8 +19,6 @@ class RatingsListScreen extends StatefulWidget {
 }
 
 class _RatingsListScreenState extends State<RatingsListScreen> {
-  late RatingProvider _ratingProvider;
-  List<Rating>? _rating;
   late ReservationProvider _reservationProvider;
   List<Reservation>? _reservation;
   late UsersProvider _usersProvider;
@@ -93,10 +85,19 @@ class _RatingsListScreenState extends State<RatingsListScreen> {
   }
 
   Widget _buildDataListView() {
+    Set<int?> renderedProjectionIds = {};
+
     return ListView.builder(
       itemCount: _reservation?.length ?? 0,
       itemBuilder: (context, index) {
         final reservation = _reservation![index];
+
+        if (renderedProjectionIds.contains(reservation.projectionId)) {
+          return const SizedBox.shrink();
+        }
+
+        renderedProjectionIds.add(reservation.projectionId);
+
         return GestureDetector(
           onTap: () {
             _fetchCurrentUserAndMovie(reservation);
@@ -118,7 +119,8 @@ class _RatingsListScreenState extends State<RatingsListScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           SizedBox(height: 4.0),
-                          Text('Projection ID: ${reservation.projectionId}'),
+                          Text(
+                              'Projection Number: ${reservation.projectionId}'),
                           FutureBuilder<String>(
                             future: _fetchMovieTitle(
                                 context, reservation.projectionId),

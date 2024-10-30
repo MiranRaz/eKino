@@ -16,7 +16,7 @@ import 'package:intl/intl.dart';
 class ProjectionDetailsScreen extends StatefulWidget {
   final Projection? projection;
 
-  const ProjectionDetailsScreen({Key? key, this.projection}) : super(key: key);
+  const ProjectionDetailsScreen({super.key, this.projection});
 
   @override
   State<ProjectionDetailsScreen> createState() =>
@@ -72,7 +72,7 @@ class _ProjectionDetailsScreenState extends State<ProjectionDetailsScreen> {
     final currentUser = await _usersProvider.getUsername(usernameLS ?? "");
     _currentUser = currentUser;
 
-    print("user id -> ${currentUser?.userId}");
+    print("user id -> ${currentUser.userId}");
     print("projection2 ${widget.projection?.projectionId}");
 
     setState(() {
@@ -109,14 +109,14 @@ class _ProjectionDetailsScreenState extends State<ProjectionDetailsScreen> {
       initialValue: _initialValue,
       child: Column(
         children: [
-          Container(
+          SizedBox(
             width: double.infinity,
             height: 300,
             child: imageFromBase64String(_moviesList
                     ?.firstWhere((movie) =>
-                        movie?.movieId.toString() ==
+                        movie.movieId.toString() ==
                         _initialValue['movieId'].toString())
-                    ?.photo ??
+                    .photo ??
                 ""),
           ),
           FormBuilderDropdown<String>(
@@ -160,9 +160,9 @@ class _ProjectionDetailsScreenState extends State<ProjectionDetailsScreen> {
           TextFormField(
             initialValue: _moviesList
                     ?.firstWhere((movie) =>
-                        movie?.movieId.toString() ==
+                        movie.movieId.toString() ==
                         _initialValue['movieId'].toString())
-                    ?.description ??
+                    .description ??
                 '', // Retrieve the description corresponding to the selected movie ID
             readOnly: true, // Make the field read-only
             maxLines: null, // Allow the text to span multiple lines

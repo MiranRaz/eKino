@@ -7,7 +7,7 @@ part of 'directors.dart';
 // **************************************************************************
 
 Director _$DirectorFromJson(Map<String, dynamic> json) => Director(
-      json['directorId'] as int?,
+      (json['directorId'] as num?)?.toInt(),
       json['fullName'] as String?,
       json['biography'] as String?,
       json['photo'] as String?,

@@ -7,7 +7,6 @@ import 'package:ekino_admin/models/movies.dart';
 import 'package:ekino_admin/models/search_result.dart';
 import 'package:ekino_admin/providers/directors_provider.dart';
 import 'package:ekino_admin/providers/movies_provider.dart';
-import 'package:ekino_admin/widgets/master_screen.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';

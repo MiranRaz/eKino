@@ -7,7 +7,7 @@ part of 'auditorium.dart';
 // **************************************************************************
 
 Auditorium _$AuditoriumFromJson(Map<String, dynamic> json) => Auditorium(
-      json['auditoriumId'] as int?,
+      (json['auditoriumId'] as num?)?.toInt(),
       json['name'] as String?,
     );
 
