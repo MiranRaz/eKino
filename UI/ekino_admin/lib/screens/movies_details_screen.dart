@@ -229,18 +229,12 @@ class _MoviesDetailsScreenState extends State<MoviesDetailsScreen> {
 
   Widget _getImagePreview() {
     final String? base64Image =
-        _formKey.currentState?.value['photo'] as String?;
+        _base64Image ?? _initialValue['photo'] as String?;
     if (base64Image != null) {
       return SizedBox(
         width: double.infinity,
         height: 400,
         child: Image.memory(base64Decode(base64Image)),
-      );
-    } else if (widget.movies?.photo != null) {
-      return SizedBox(
-        width: double.infinity,
-        height: 400,
-        child: Image.memory(base64Decode(widget.movies!.photo!)),
       );
     }
     return const Placeholder();
@@ -258,7 +252,8 @@ class _MoviesDetailsScreenState extends State<MoviesDetailsScreen> {
       setState(() {
         _base64Image = newBase64Image;
         _initialValue = Map.from(_initialValue);
-        _initialValue['photo'] = newBase64Image;
+        _initialValue['photo'] =
+            newBase64Image; // Update initial value for the form
       });
     }
   }
