@@ -115,7 +115,6 @@ class _MoviesDetailsScreenState extends State<MoviesDetailsScreen> {
 
                         if (updatedData != null) {
                           try {
-                            // Check if the year needs to be converted to ISO 8601 format
                             if (updatedData['year'] is DateTime) {
                               updatedData['year'] =
                                   updatedData['year'].toIso8601String();
@@ -125,10 +124,8 @@ class _MoviesDetailsScreenState extends State<MoviesDetailsScreen> {
                                       .toIso8601String();
                             }
 
-                            // Ensure the photo is included in the updatedData
                             if (_base64Image != null) {
-                              updatedData['photo'] =
-                                  _base64Image; // Use the base64 image if available
+                              updatedData['photo'] = _base64Image;
                             }
 
                             if (widget.movies != null) {
@@ -256,20 +253,26 @@ class _MoviesDetailsScreenState extends State<MoviesDetailsScreen> {
 
     if (result != null && result.files.single.path != null) {
       final newImage = File(result.files.single.path!);
-      final newBase64Image = base64Encode(newImage.readAsBytesSync());
+      final imageSize = await newImage.length();
+
+      if (imageSize > 2 * 1024 * 1024) {
+        _showMessageDialog('Error', 'Image size must be less than 2MB.');
+        return;
+      }
+
+      final newBase64Image = base64Encode(await newImage.readAsBytes());
 
       setState(() {
         _base64Image = newBase64Image;
         _initialValue = Map.from(_initialValue);
-        _initialValue['photo'] =
-            newBase64Image; // Update initial value for the form
+        _initialValue['photo'] = newBase64Image;
       });
     }
   }
 
   String _formatDateTime(DateTime? dateTime, {bool isNewOrUpdate = false}) {
     if (isNewOrUpdate) {
-      return dateTime?.toIso8601String() ?? ''; // Convert to ISO 8601
+      return dateTime?.toIso8601String() ?? '';
     } else {
       return dateTime != null
           ? DateFormat('yyyy-MM-ddTHH:mm:ss.SSS').format(dateTime)
