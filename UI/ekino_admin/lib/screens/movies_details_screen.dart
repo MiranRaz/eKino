@@ -231,10 +231,19 @@ class _MoviesDetailsScreenState extends State<MoviesDetailsScreen> {
     final String? base64Image =
         _base64Image ?? _initialValue['photo'] as String?;
     if (base64Image != null) {
-      return SizedBox(
-        width: double.infinity,
-        height: 400,
-        child: Image.memory(base64Decode(base64Image)),
+      return Center(
+        child: Container(
+          width: 400,
+          height: 612,
+          clipBehavior: Clip.hardEdge,
+          decoration: BoxDecoration(
+            border: Border.all(color: Colors.grey),
+          ),
+          child: Image.memory(
+            base64Decode(base64Image),
+            fit: BoxFit.cover,
+          ),
+        ),
       );
     }
     return const Placeholder();
