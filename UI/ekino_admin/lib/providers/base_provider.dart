@@ -223,4 +223,17 @@ abstract class BaseProvider<T> with ChangeNotifier {
       throw Exception("Unknown error, please try again!");
     }
   }
+
+  Future<void> delete(
+    int id,
+  ) async {
+    final url = "$_baseUrl$_endpoint/$id";
+    final headers = createHeaders();
+    final response = await http.delete(Uri.parse(url), headers: headers);
+
+    if (isValidResponse(response)) {
+    } else {
+      throw Exception("Failed to delete the resource.");
+    }
+  }
 }

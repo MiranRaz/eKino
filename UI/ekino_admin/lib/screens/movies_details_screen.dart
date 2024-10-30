@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:ekino_admin/screens/movies_list_screen.dart';
 import 'package:intl/intl.dart';
 import 'package:ekino_admin/models/directors.dart';
 import 'package:ekino_admin/models/movies.dart';
@@ -139,6 +140,13 @@ class _MoviesDetailsScreenState extends State<MoviesDetailsScreen> {
                               _showMessageDialog('Success',
                                   'New movie added successfully with ID: ${newMovie.movieId}');
                             }
+
+                            // Navigate to Movies List after saving
+                            Navigator.of(context).pushReplacement(
+                              MaterialPageRoute(
+                                builder: (context) => MoviesListScreen(),
+                              ),
+                            );
                           } catch (error) {
                             _showMessageDialog(
                                 'Error', 'An error occurred: $error');
@@ -146,6 +154,30 @@ class _MoviesDetailsScreenState extends State<MoviesDetailsScreen> {
                         }
                       },
                       child: const Text('Save'),
+                    ),
+                    const SizedBox(width: 8),
+                    ElevatedButton(
+                      onPressed: () async {
+                        final confirmDelete =
+                            await _showConfirmationDialog(context);
+                        if (confirmDelete == true) {
+                          try {
+                            await _moviesProvider
+                                .delete(widget.movies!.movieId!);
+                            _showMessageDialog(
+                                'Success', 'Movie deleted successfully.');
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) => MoviesListScreen(),
+                              ),
+                            );
+                          } catch (error) {
+                            _showMessageDialog('Error',
+                                'An error occurred while deleting the movie: $error');
+                          }
+                        }
+                      },
+                      child: const Text('Delete'),
                     ),
                   ],
                 ),
@@ -278,5 +310,32 @@ class _MoviesDetailsScreenState extends State<MoviesDetailsScreen> {
           ? DateFormat('yyyy-MM-ddTHH:mm:ss.SSS').format(dateTime)
           : '';
     }
+  }
+
+  Future<bool?> _showConfirmationDialog(BuildContext context) {
+    return showDialog<bool>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Confirm Deletion'),
+          content: const Text('Are you sure you want to delete this movie?'),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context)
+                    .pop(false); // Return false if not confirmed
+              },
+              child: const Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(true); // Return true if confirmed
+              },
+              child: const Text('Delete'),
+            ),
+          ],
+        );
+      },
+    );
   }
 }
