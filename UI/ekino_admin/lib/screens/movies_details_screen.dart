@@ -70,9 +70,11 @@ class _MoviesDetailsScreenState extends State<MoviesDetailsScreen> {
   Future<void> initForm() async {
     directorResult = await _directorsProvider.get();
 
-    setState(() {
-      isLoading = false;
-    });
+    if (mounted) {
+      setState(() {
+        isLoading = false;
+      });
+    }
   }
 
   @override
@@ -108,19 +110,33 @@ class _MoviesDetailsScreenState extends State<MoviesDetailsScreen> {
                     ElevatedButton(
                       onPressed: () async {
                         _formKey.currentState?.saveAndValidate();
-                        final updatedData = _formKey.currentState?.value;
+                        final updatedData =
+                            Map.from(_formKey.currentState?.value ?? {});
+
                         if (updatedData != null) {
                           try {
-                            if (widget.movies != null) {
-                              // Format the year to a string before updating
+                            // Check if the year needs to be converted to ISO 8601 format
+                            if (updatedData['year'] is DateTime) {
                               updatedData['year'] =
-                                  _formatDateTime(updatedData['year']);
+                                  updatedData['year'].toIso8601String();
+                            } else if (updatedData['year'] is String) {
+                              updatedData['year'] =
+                                  DateTime.parse(updatedData['year'])
+                                      .toIso8601String();
+                            }
+
+                            // Ensure the photo is included in the updatedData
+                            if (_base64Image != null) {
+                              updatedData['photo'] =
+                                  _base64Image; // Use the base64 image if available
+                            }
+
+                            if (widget.movies != null) {
                               await _moviesProvider.update(
                                   widget.movies!.movieId!, updatedData);
                               _showMessageDialog(
                                   'Success', 'Movie updated successfully.');
                             } else {
-                              // Insert logic
                               final newMovie =
                                   await _moviesProvider.insert(updatedData);
                               _showMessageDialog('Success',
@@ -240,17 +256,20 @@ class _MoviesDetailsScreenState extends State<MoviesDetailsScreen> {
       final newBase64Image = base64Encode(newImage.readAsBytesSync());
 
       setState(() {
-        _image = newImage;
         _base64Image = newBase64Image;
-        _initialValue['photo'] = newBase64Image; // Update the initial value map
+        _initialValue = Map.from(_initialValue);
+        _initialValue['photo'] = newBase64Image;
       });
     }
   }
 
-  String _formatDateTime(DateTime? dateTime) {
-    if (dateTime != null) {
-      return DateFormat('yyyy-MM-ddTHH:mm:ss.SSS').format(dateTime);
+  String _formatDateTime(DateTime? dateTime, {bool isNewOrUpdate = false}) {
+    if (isNewOrUpdate) {
+      return dateTime?.toIso8601String() ?? ''; // Convert to ISO 8601
+    } else {
+      return dateTime != null
+          ? DateFormat('yyyy-MM-ddTHH:mm:ss.SSS').format(dateTime)
+          : '';
     }
-    return '';
   }
 }
